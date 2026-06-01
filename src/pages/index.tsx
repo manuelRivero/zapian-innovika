@@ -37,7 +37,11 @@ const IndexPage: React.FC<PageProps> = () => (
 )
 
 export const Head: HeadFC = () => (
-  <Seo title="Innovika — Producción a la medida" />
+  <Seo
+    title="Fabricación de Carpintería Para tus Proyectos"
+    description="Fabricamos cocinas, closets y carpintería a medida para arquitectos, desarrolladores e interioristas. Entregas confiables en todo México."
+    image="/images/InnovikaMeta-02.jpg"
+  />
 )
 
 export default IndexPage

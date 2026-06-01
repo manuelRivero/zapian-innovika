@@ -9,10 +9,12 @@
  */
 module.exports = {
   siteMetadata: {
-    title: `Innovika Zapian`,
-    description: `Innovika Zapian web platform.`,
+    title: `Innovika`,
+    description: `Fabricamos cocinas, closets y carpintería a medida para arquitectos, desarrolladores e interioristas. Entregas confiables en todo México.`,
+    keywords: `carpintería a medida, fabricación de cocinas, closets a medida, carpintería industrial, muebles para arquitectos, interiorismo corporativo, manufactura de muebles, carpintería México, Innovika, CNC madera, proyectos de arquitectura`,
+    image: `/images/InnovikaMeta-02.jpg`,
     author: `@innovika`,
-    siteUrl: `https://innovika.com/`,
+    siteUrl: `https://innovika.com`,
   },
   plugins: [
     `gatsby-plugin-postcss`,
