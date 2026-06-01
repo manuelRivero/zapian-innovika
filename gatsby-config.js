@@ -4,6 +4,13 @@
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/
  */
 
+const siteUrl =
+  process.env.GATSBY_SITE_URL ||
+  process.env.RENDER_EXTERNAL_URL ||
+  (process.env.NODE_ENV === `development`
+    ? `http://localhost:8000`
+    : `https://innovika.com`)
+
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
@@ -14,7 +21,7 @@ module.exports = {
     keywords: `carpintería a medida, fabricación de cocinas, closets a medida, carpintería industrial, muebles para arquitectos, interiorismo corporativo, manufactura de muebles, carpintería México, Innovika, CNC madera, proyectos de arquitectura`,
     image: `/images/InnovikaMeta-02.jpg`,
     author: `@innovika`,
-    siteUrl: `https://innovika.com`,
+    siteUrl,
   },
   plugins: [
     `gatsby-plugin-postcss`,
