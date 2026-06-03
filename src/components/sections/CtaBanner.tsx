@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type CtaBannerCta = {
   label: string
@@ -26,7 +27,9 @@ const CtaBanner = ({
   cta = { label: "HABLEMOS DE TU PROYECTO", href: "#contacto" },
 }: CtaBannerProps) => {
   return (
-    <section
+    <ScrollReveal
+      as="section"
+      animation="fade-up"
       className={cn("section-block w-full", className)}
       aria-labelledby="cta-banner-heading"
     >
@@ -69,7 +72,7 @@ const CtaBanner = ({
           </div>
         </div>
       </div>
-    </section>
+    </ScrollReveal>
   )
 }
 

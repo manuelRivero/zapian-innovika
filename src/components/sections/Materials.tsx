@@ -3,6 +3,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import Autoplay from "embla-carousel-autoplay"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type MaterialSlide = {
   id: string
@@ -146,7 +147,9 @@ const Materials = ({
   )
 
   return (
-    <section
+    <ScrollReveal
+      as="section"
+      animation="fade-up"
       className={cn("section-block w-full overflow-hidden scroll-mt-20", className)}
       aria-labelledby="materials-title"
       id="materiales"
@@ -200,7 +203,7 @@ const Materials = ({
           </div>
         )}
       </div>
-    </section>
+    </ScrollReveal>
   )
 }
 

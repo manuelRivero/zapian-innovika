@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type ProjectTypeOption = {
   value: string
@@ -177,7 +178,9 @@ const ContactForm = ({
   }
 
   return (
-    <section
+    <ScrollReveal
+      as="section"
+      animation="fade-up"
       id="contacto"
       className={cn("section-block w-full scroll-mt-20", className)}
       aria-labelledby="contact-form-heading"
@@ -427,7 +430,7 @@ const ContactForm = ({
           </>
         )}
       </div>
-    </section>
+    </ScrollReveal>
   )
 }
 

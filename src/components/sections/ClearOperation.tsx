@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type ClearOperationCta = {
   label: string
@@ -41,7 +42,10 @@ const ClearOperation = ({
       <div className="container-layout flex flex-col gap-8 md:gap-10">
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
           {/* Imagen — primero en móvil, columna derecha en desktop */}
-          <div className="image-container order-1 min-h-[280px] w-full lg:order-2 lg:min-h-[520px]">
+          <ScrollReveal
+            animation="fade-up"
+            className="image-container order-1 min-h-[280px] w-full lg:order-2 lg:min-h-[520px]"
+          >
             {imageSrc && (
               <img
                 src={imageSrc}
@@ -50,7 +54,7 @@ const ClearOperation = ({
                 loading="lazy"
               />
             )}
-          </div>
+          </ScrollReveal>
 
           {/* Tarjeta — segunda en móvil, columna izquierda en desktop */}
           <div className="order-2 flex lg:order-1">
@@ -67,13 +71,18 @@ const ClearOperation = ({
               </p>
 
               <ul className="m-0 mt-5 flex list-none flex-col gap-0 p-0 md:mt-6">
-                {items.map((item) => (
-                  <li key={item}>
+                {items.map((item, index) => (
+                  <ScrollReveal
+                    key={item}
+                    as="li"
+                    animation="fade-up"
+                    delay={index * 200}
+                  >
                     <hr className="m-0 border-0 border-t border-(--color-neutral-700)/35" />
                     <p className="text-body py-3 md:py-3.5">
                       {item}
                     </p>
-                  </li>
+                  </ScrollReveal>
                 ))}
               </ul>
             </div>

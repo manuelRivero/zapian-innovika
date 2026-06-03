@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type ProcessStep = {
   id: string
@@ -44,7 +45,9 @@ const ProcessSteps = ({
   steps = defaultSteps,
 }: ProcessStepsProps) => {
   return (
-    <section
+    <ScrollReveal
+      as="section"
+      animation="fade-up"
       className={cn("section-block w-full", className)}
       aria-labelledby="process-steps-heading"
     >
@@ -75,7 +78,7 @@ const ProcessSteps = ({
           ))}
         </ol>
       </div>
-    </section>
+    </ScrollReveal>
   )
 }
 

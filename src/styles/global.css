@@ -1031,4 +1031,55 @@
       margin-top: 5.1875rem;
     }
   }
+
+  /* ScrollReveal — animaciones al entrar/salir del viewport */
+  .scroll-reveal--armed {
+    transition-property: opacity, transform;
+    transition-duration: var(--scroll-reveal-duration, 1000ms);
+    transition-delay: 0ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .scroll-reveal--armed.scroll-reveal--visible {
+    transition-delay: var(--scroll-reveal-delay, 0ms);
+  }
+
+  .scroll-reveal--armed.scroll-reveal--fade-in {
+    opacity: 0;
+  }
+
+  .scroll-reveal--armed.scroll-reveal--fade-up {
+    opacity: 0;
+    transform: translateY(var(--scroll-reveal-distance, 28px));
+  }
+
+  .scroll-reveal--armed.scroll-reveal--fade-down {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--scroll-reveal-distance, 28px)));
+  }
+
+  .scroll-reveal--armed.scroll-reveal--fade-left {
+    opacity: 0;
+    transform: translateX(var(--scroll-reveal-distance, 28px));
+  }
+
+  .scroll-reveal--armed.scroll-reveal--fade-right {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--scroll-reveal-distance, 28px)));
+  }
+
+  .scroll-reveal--armed.scroll-reveal--visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal--armed {
+      transition: none;
+      opacity: 1;
+      transform: none;
+      will-change: auto;
+    }
+  }
 }

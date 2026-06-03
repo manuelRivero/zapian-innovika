@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type CarpinteriaMedidaCta = {
   label: string
@@ -51,7 +52,9 @@ const CarpinteriaMedida = ({
   cta = { label: "HABLEMOS", href: "#contacto" },
 }: CarpinteriaMedidaProps) => {
   return (
-    <section
+    <ScrollReveal
+      as="section"
+      animation="fade-up"
       id="como-trabajamos"
       className={cn("section-block w-full scroll-mt-20", className)}
       aria-labelledby="carpinteria-medida-title"
@@ -99,7 +102,7 @@ const CarpinteriaMedida = ({
           </div>
         )}
       </div>
-    </section>
+    </ScrollReveal>
   )
 }
 

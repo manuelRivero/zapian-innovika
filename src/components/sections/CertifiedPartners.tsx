@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type PartnerLogo = {
   id: string
@@ -65,7 +66,9 @@ const CertifiedPartners = ({
   )
 
   return (
-    <section
+    <ScrollReveal
+      as="section"
+      animation="fade-up"
       className={cn(
         "section-block w-full bg-(--color-bg-partners) text-(--color-text-inverse)",
         className
@@ -106,7 +109,7 @@ const CertifiedPartners = ({
           ))}
         </div>
       </div>
-    </section>
+    </ScrollReveal>
   )
 }
 

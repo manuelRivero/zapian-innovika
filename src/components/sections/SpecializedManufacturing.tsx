@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
+import ScrollReveal from "../ui/ScrollReveal"
 
 export type SpecializedManufacturingImage = {
   src: string
@@ -116,9 +117,11 @@ const BlockText = ({
         {subtitle}
       </p>
     </div>
-    <p className="text-body-emphasis">
-      {footer}
-    </p>
+    <ScrollReveal animation="fade-right">
+      <p className="text-body-emphasis">
+        {footer}
+      </p>
+    </ScrollReveal>
   </div>
 )
 
@@ -131,22 +134,27 @@ const BlockMedia = ({
 
   if (isWide) {
     return (
-      <div className="image-container specialized-media-wide">
+      <ScrollReveal
+        animation="fade-right"
+        className="image-container specialized-media-wide"
+      >
         <img
           src={images[0].src}
           alt={images[0].alt}
           className="absolute inset-0 size-full object-cover object-center"
           loading="lazy"
         />
-      </div>
+      </ScrollReveal>
     )
   }
 
   return (
     <div className="specialized-media-pair">
-      {images.map((image) => (
-        <div
+      {images.map((image, index) => (
+        <ScrollReveal
           key={image.src}
+          animation="fade-right"
+          delay={index === 1 ? 200 : 0}
           className="image-container specialized-media-square"
         >
           <img
@@ -155,7 +163,7 @@ const BlockMedia = ({
             className="absolute inset-0 size-full object-cover object-center"
             loading="lazy"
           />
-        </div>
+        </ScrollReveal>
       ))}
     </div>
   )
