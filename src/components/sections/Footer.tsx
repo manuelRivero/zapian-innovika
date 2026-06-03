@@ -62,19 +62,19 @@ const defaultSocialLinks: FooterSocialLink[] = [
   {
     id: "facebook",
     label: "Facebook",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/espaciosbyinnovika/",
     icon: <FacebookIcon />,
   },
   {
     id: "instagram",
     label: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/innovika",
     icon: <InstagramIcon />,
   },
   {
     id: "tiktok",
     label: "TikTok",
-    href: "https://tiktok.com",
+    href: "https://www.tiktok.com/@innovika.mx",
     icon: <TikTokIcon />,
   },
 ]

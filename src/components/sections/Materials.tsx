@@ -100,7 +100,10 @@ const Materials = ({
   className,
   title = "Materiales y acabados",
   slides = defaultSlides,
-  cta = { label: "CONSULTAR MATERIALES DISPONIBLES", href: "#materiales" },
+  cta = {
+    label: "CONSULTAR MATERIALES DISPONIBLES",
+    href: "/documents/CATÁLOGO SITIO WEB.pdf",
+  },
 }: MaterialsProps) => {
   const autoplayPlugin = React.useMemo(
     () =>
@@ -197,7 +200,15 @@ const Materials = ({
 
         {cta && (
           <div className="flex justify-center pt-2">
-            <Button as="a" href={cta.href} variant="primary" size="lg">
+            <Button
+              as="a"
+              href={cta.href}
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
               {cta.label}
             </Button>
           </div>

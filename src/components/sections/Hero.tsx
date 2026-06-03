@@ -4,26 +4,23 @@ import { useMediaReady } from "../../hooks/useMediaReady"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
 
-export type HeroGallerySlot = {
-  /** Ruta de la imagen cuando la agregues manualmente */
-  src?: string
-  alt?: string
-}
+const HERO_VIDEO_SRC = "/videos/Video Inovika 30seg - Web (1).mp4"
 
 export type HeroCta = {
   label: string
   href: string
 }
 
+export type HeroGallerySlot = {
+  src?: string
+  alt?: string
+}
+
 export type HeroProps = {
   className?: string
-  /** Líneas del título (sans, mayúsculas). Por defecto 3 líneas como en el diseño. */
   titleLines?: string[]
   subtitle?: string
   cta?: HeroCta
-  /** Ruta del video de fondo (mp4/webm). Déjalo vacío hasta colocar el archivo. */
-  videoSrc?: string
-  videoPoster?: string
   galleryPrimary?: HeroGallerySlot
   gallerySecondary?: HeroGallerySlot
   galleryCaption?: string
@@ -36,7 +33,7 @@ const defaultTitleLines = [
 ]
 
 /**
- * Contenedor con border-radius del hero. Coloca la imagen o video así:
+ * Contenedor con border-radius del hero. Coloca la imagen así:
  * <img src="..." alt="" className="absolute inset-0 size-full object-cover" />
  */
 const MediaFrame = ({
@@ -63,14 +60,11 @@ const Hero = ({
   titleLines = defaultTitleLines,
   subtitle = "para arquitectos, interioristas, tiendas de cocinas y constructoras",
   cta = { label: "INICIAR PROYECTO", href: "#contacto" },
-  videoSrc,
-  videoPoster,
   galleryPrimary,
   gallerySecondary,
   galleryCaption = "",
 }: HeroProps) => {
-  const waitsForBannerMedia = Boolean(videoSrc || videoPoster)
-  const { onMediaLoad, imageRef } = useMediaReady(waitsForBannerMedia)
+  const { isMediaReady, onMediaLoad } = useMediaReady(true)
 
   return (
     <section
@@ -78,53 +72,19 @@ const Hero = ({
       aria-label="Presentación"
     >
       <div className="container-layout flex flex-col gap-(--spacing-hero-row)">
-        {/* Fila 1 — imagen/video + overlay + copy (Figma: 1212×658) */}
-        <div className="hero-media hero-banner relative w-full">
-          {videoSrc ? (
-            <video
-              className="absolute inset-0 size-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={videoPoster}
-              onLoadedData={onMediaLoad}
-              aria-hidden="true"
-            >
-              <source src={videoSrc} type="video/mp4" />
-            </video>
-          ) : (
-            <>
-              {/*
-                Video de fondo — descomenta y ajusta la ruta:
-                <video
-                  className="absolute inset-0 size-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  poster="/videos/hero-poster.jpg"
-                >
-                  <source src="/videos/hero.mp4" type="video/mp4" />
-                </video>
-              */}
-              {videoPoster ? (
-                <img
-                  ref={imageRef}
-                  src={videoPoster}
-                  alt=""
-                  className="absolute inset-0 size-full object-cover"
-                  onLoad={onMediaLoad}
-                  aria-hidden="true"
-                />
-              ) : (
-                <div
-                  className="absolute inset-0 bg-(--color-neutral-600)"
-                  aria-hidden="true"
-                />
-              )}
-            </>
-          )}
+        {/* Fila 1 — video + overlay + copy */}
+        <div className="hero-media hero-banner relative w-full bg-black">
+          <video
+            className="absolute inset-0 size-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            onCanPlay={onMediaLoad}
+            aria-hidden="true"
+          >
+            <source src={HERO_VIDEO_SRC} type="video/mp4" />
+          </video>
 
           <div
             className="absolute inset-0 bg-(--color-overlay-hero)"
@@ -132,7 +92,12 @@ const Hero = ({
           />
 
           <div className="relative z-10 flex min-h-[inherit] flex-col items-center justify-center px-6 py-12 text-center md:px-10 md:py-12">
-            <div className="flex w-full max-w-[662px] flex-col items-center">
+            <ScrollReveal
+              animation="fade-up"
+              shouldAnimate={isMediaReady}
+              delay={200}
+              className="flex w-full max-w-[662px] flex-col items-center"
+            >
               <h1 className="hero-title m-0 w-full">
                 {titleLines.map((line) => (
                   <span key={line} className="block">
@@ -154,11 +119,11 @@ const Hero = ({
               >
                 {cta.label}
               </Button>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
 
-        {/* Fila 2 — imágenes (2:1 → columna en móvil) */}
+        {/* Fila 2 — imágenes de galería */}
         <div className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-stretch">
           <ScrollReveal
             animation="fade-right"
@@ -169,23 +134,13 @@ const Hero = ({
               slotLabel="gallery-primary"
               aspectClassName="aspect-[16/10] min-h-[220px] md:min-h-[280px] lg:min-h-[320px]"
             >
-              {galleryPrimary?.src ? (
+              {galleryPrimary?.src && (
                 <img
                   src={galleryPrimary.src}
                   alt={galleryPrimary.alt ?? ""}
                   className="absolute inset-0 size-full object-cover"
                   loading="lazy"
                 />
-              ) : (
-                /*
-                  Imagen principal (≈70% del ancho en desktop):
-                  <img
-                    src="/images/hero-gallery-1.jpg"
-                    alt="Descripción"
-                    className="absolute inset-0 size-full object-cover"
-                  />
-                */
-                null
               )}
             </MediaFrame>
           </ScrollReveal>
@@ -201,23 +156,13 @@ const Hero = ({
               aspectClassName="aspect-[4/5] min-h-[260px] lg:aspect-auto lg:min-h-0 lg:h-full"
               className="h-full"
             >
-              {gallerySecondary?.src ? (
+              {gallerySecondary?.src && (
                 <img
                   src={gallerySecondary.src}
                   alt={gallerySecondary.alt ?? ""}
                   className="absolute inset-0 size-full object-cover"
                   loading="lazy"
                 />
-              ) : (
-                /*
-                  Imagen secundaria (≈30% del ancho en desktop):
-                  <img
-                    src="/images/hero-gallery-2.jpg"
-                    alt="Descripción"
-                    className="absolute inset-0 size-full object-cover"
-                  />
-                */
-                null
               )}
             </MediaFrame>
           </ScrollReveal>

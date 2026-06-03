@@ -15,7 +15,6 @@ import CtaBanner from "../components/sections/CtaBanner"
 const IndexPage: React.FC<PageProps> = () => (
   <Layout>
     <Hero
-      videoPoster="/images/hero-banner.png"
       galleryPrimary={{
         src: "/images/hero-gallery-primary.png",
         alt: "Cocina moderna con isla y acabados en madera clara",
