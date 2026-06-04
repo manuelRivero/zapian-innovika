@@ -102,7 +102,7 @@ const Materials = ({
   slides = defaultSlides,
   cta = {
     label: "CONSULTAR MATERIALES DISPONIBLES",
-    href: "/documents/CATÁLOGO SITIO WEB.pdf",
+    href: "/documents/materiales.pdf",
   },
 }: MaterialsProps) => {
   const autoplayPlugin = React.useMemo(
