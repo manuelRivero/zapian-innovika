@@ -63,7 +63,7 @@ const Hero = ({
   gallerySecondary,
   galleryCaption = "Casa Reserva Real",
 }: HeroProps) => {
-  const { isMediaReady, onMediaLoad } = useMediaReady(true)
+  const { onMediaLoad } = useMediaReady(true)
 
   return (
     <section
@@ -91,12 +91,7 @@ const Hero = ({
           />
 
           <div className="hero-banner__content">
-            <ScrollReveal
-              animation="fade-up"
-              shouldAnimate={isMediaReady}
-              delay={200}
-              className="flex w-full max-w-[662px] flex-col items-center"
-            >
+            <div className="flex w-full max-w-[662px] flex-col items-center">
               <h1 className="hero-title m-0 w-full">
                 {titleLines.map((line) => (
                   <span key={line} className="block">
@@ -118,7 +113,7 @@ const Hero = ({
               >
                 {cta.label}
               </Button>
-            </ScrollReveal>
+            </div>
           </div>
         </div>
 
