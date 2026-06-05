@@ -90,8 +90,8 @@ const MaterialCard = ({ slide }: { slide: MaterialSlide }) => {
         <div
           className={cn(
             "materials-carousel-card__overlay",
-            "opacity-100 transition-opacity duration-300 ease-in-out",
-            "lg:opacity-0 lg:group-hover:opacity-100"
+            "opacity-0 transition-opacity duration-300 ease-in-out",
+            "group-hover:opacity-100"
           )}
         >
           <p className="materials-carousel-card__label">
@@ -128,7 +128,7 @@ const Materials = ({
   )
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "start" },
+    { loop: false, align: "start" },
     [autoplayPlugin]
   )
 

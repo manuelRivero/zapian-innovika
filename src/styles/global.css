@@ -68,7 +68,7 @@
   --color-overlay: rgba(0, 0, 0, 0.52);
   --color-overlay-light: rgba(0, 0, 0, 0.35);
   --color-overlay-hero: rgba(66, 48, 46, 0.4);
-  --color-overlay-materials: rgba(248, 248, 248, 0.72);
+  --color-overlay-materials: rgba(248, 248, 248, 0.50);
   --color-process-line: rgba(89, 20, 39, 0.28);
 
   /* Semantic */
@@ -615,16 +615,18 @@
     }
   }
 
+  /* ── Mobile: scroll táctil horizontal ── */
   .partners-marquee {
-    overflow: hidden;
+    overflow-x: scroll;
+    overflow-y: hidden;
     width: 100%;
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 8%,
-      #000 92%,
-      transparent
-    );
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .partners-marquee::-webkit-scrollbar {
+    display: none;
   }
 
   .partners-marquee__track {
@@ -632,8 +634,8 @@
     align-items: center;
     width: max-content;
     gap: clamp(2.5rem, 6vw, 5rem);
-    animation: partners-marquee-scroll 35s linear infinite;
     will-change: transform;
+    padding-inline: 1.5rem;
   }
 
   .partners-marquee__item {
@@ -641,6 +643,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    scroll-snap-align: center;
+  }
+
+  .partners-marquee__item--duplicate {
+    display: none;
   }
 
   .partners-marquee__logo {
@@ -651,6 +658,40 @@
     object-position: center;
     user-select: none;
     pointer-events: none;
+  }
+
+  /* ── Desktop: marquee animado automático ── */
+  @media (min-width: 768px) {
+    .partners-marquee {
+      overflow: hidden;
+      -webkit-overflow-scrolling: auto;
+      scroll-snap-type: none;
+      scrollbar-width: auto;
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 8%,
+        #000 92%,
+        transparent
+      );
+    }
+
+    .partners-marquee::-webkit-scrollbar {
+      display: revert;
+    }
+
+    .partners-marquee__track {
+      animation: partners-marquee-scroll 35s linear infinite;
+      padding-inline: 0;
+    }
+
+    .partners-marquee__item {
+      scroll-snap-align: none;
+    }
+
+    .partners-marquee__item--duplicate {
+      display: flex;
+    }
   }
 
   @keyframes partners-marquee-scroll {
@@ -677,6 +718,8 @@
 
     .partners-marquee {
       mask-image: none;
+      overflow-x: hidden;
+      scroll-snap-type: none;
     }
   }
 
@@ -909,8 +952,7 @@
   }
 
   .footer-value--address {
-    font-family: var(--font-family-baskervville);
-    font-style: italic;
+    font-style: normal;
     font-weight: 400;
   }
 

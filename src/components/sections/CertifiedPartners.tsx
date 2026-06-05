@@ -92,7 +92,10 @@ const CertifiedPartners = ({
           {marqueeLogos.map((logo, index) => (
             <div
               key={`${logo.id}-${index}`}
-              className="partners-marquee__item"
+              className={cn(
+                "partners-marquee__item",
+                index >= logos.length && "partners-marquee__item--duplicate"
+              )}
               aria-hidden={index >= logos.length}
             >
               <img
