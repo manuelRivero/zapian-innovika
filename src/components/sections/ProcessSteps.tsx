@@ -1,4 +1,5 @@
 import * as React from "react"
+import { SECTION_IDS } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import ScrollReveal from "../ui/ScrollReveal"
 
@@ -17,13 +18,13 @@ export type ProcessStepsProps = {
 const defaultSteps: ProcessStep[] = [
   {
     id: "design",
-    title: "1. Diseño y definición",
+    title: "1. DISEÑO Y DEFINICIÓN",
     description:
       "Recibimos tu diseño y validamos especificaciones técnicas.",
   },
   {
     id: "planning",
-    title: "2. Planeación y cotización",
+    title: "2. PLANEACIÓN Y COTIZACIÓN",
     description: "Definimos tiempos, costos y alcances de producción.",
   },
   {
@@ -48,7 +49,8 @@ const ProcessSteps = ({
     <ScrollReveal
       as="section"
       animation="fade-up"
-      className={cn("section-block w-full", className)}
+      id={SECTION_IDS.comoTrabajamos}
+      className={cn("section-block scroll-target w-full", className)}
       aria-labelledby="process-steps-heading"
     >
       <div className="container-layout flex flex-col gap-10 md:gap-12">

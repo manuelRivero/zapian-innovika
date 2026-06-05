@@ -1,4 +1,5 @@
 import * as React from "react"
+import { INSTAGRAM_URL } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
@@ -33,10 +34,10 @@ export type SpecializedManufacturingProps = {
 const defaultBlocks: SpecializedManufacturingBlock[] = [
   {
     id: "kitchens",
-    title: "Cocinas",
+    title: "Altas cocinas",
     subtitle:
       "Integración precisa entre diseño, funcionalidad y fabricación.",
-    footer: "Puerta Dublin en chapa de encino natural",
+    footer: "Puerta Dublín en chapa de encino natural",
     textFirst: true,
     images: [
       {
@@ -109,7 +110,7 @@ const BlockText = ({
     <div className="flex flex-col gap-2 lg:gap-3">
       <h3
         id={titleId}
-        className="text-subtitle"
+        className="text-subtitle uppercase"
       >
         {title}
       </h3>
@@ -216,12 +217,12 @@ const SpecializedManufacturing = ({
   className,
   heading = "Fabricación especializada para cada espacio",
   blocks = defaultBlocks,
-  cta = { label: "VER MÁS DE NUESTRO TRABAJO", href: "#proyectos" },
+  cta = { label: "VER MÁS DE NUESTRO TRABAJO", href: INSTAGRAM_URL },
 }: SpecializedManufacturingProps) => {
   return (
     <section
       id="proyectos"
-      className={cn("section-block w-full scroll-mt-20", className)}
+      className={cn("section-block scroll-target w-full", className)}
       aria-labelledby="specialized-manufacturing-heading"
     >
       <div className="container-layout flex flex-col gap-10 md:gap-14">
@@ -240,7 +241,14 @@ const SpecializedManufacturing = ({
 
         {cta && (
           <div className="flex justify-center pt-2">
-            <Button as="a" href={cta.href} variant="accent" size="lg">
+            <Button
+              as="a"
+              href={cta.href}
+              variant="accent"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {cta.label}
             </Button>
           </div>

@@ -16,6 +16,8 @@ export type DesignStatusOption = {
 export type ContactFormData = {
   name: string
   phone: string
+  email: string
+  city: string
   projectType: string
   hasDesign: string
   message: string
@@ -48,16 +50,49 @@ const defaultDesignStatusOptions: DesignStatusOption[] = [
 const initialFormState: ContactFormData = {
   name: "",
   phone: "",
+  email: "",
+  city: "",
   projectType: "",
   hasDesign: "",
   message: "",
 }
 
 const MIN_FIELD_LENGTH = 3
-const EMAIL_API_URL = process.env.GATSBY_EMAIL_API
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MIN_SUBMIT_DELAY_MS = 2500
+const WEB3FORMS_URL = "https://api.web3forms.com/submit"
+const WEB3FORMS_ACCESS_KEY = process.env.GATSBY_WEB3FORMS_ACCESS_KEY ?? ""
 const MOCK_SEND_DELAY_MS = 900
 
 type FormErrors = Partial<Record<keyof ContactFormData, string>>
+
+type Web3FormsResponse = {
+  success: boolean
+  message?: string
+}
+
+const getOptionLabel = (
+  options: { value: string; label: string }[],
+  value: string
+) => options.find((option) => option.value === value)?.label ?? value
+
+const buildWeb3FormsPayload = (
+  data: ContactFormData,
+  projectTypeLabel: string,
+  hasDesignLabel: string
+) => ({
+  access_key: WEB3FORMS_ACCESS_KEY,
+  subject: "Nuevo contacto — Innovika",
+  from_name: "Innovika Web",
+  name: data.name.trim(),
+  email: data.email.trim(),
+  replyto: data.email.trim(),
+  phone: data.phone.trim(),
+  city: data.city.trim(),
+  "Tipo de proyecto": projectTypeLabel,
+  "¿Ya tienes diseño?": hasDesignLabel,
+  message: data.message.trim(),
+})
 
 const validateForm = (data: ContactFormData): FormErrors => {
   const errors: FormErrors = {}
@@ -68,6 +103,14 @@ const validateForm = (data: ContactFormData): FormErrors => {
 
   if (data.phone.trim().length < MIN_FIELD_LENGTH) {
     errors.phone = `Ingresa al menos ${MIN_FIELD_LENGTH} caracteres`
+  }
+
+  if (!EMAIL_PATTERN.test(data.email.trim())) {
+    errors.email = "Ingresa un correo electrónico válido"
+  }
+
+  if (data.city.trim().length < MIN_FIELD_LENGTH) {
+    errors.city = `Ingresa al menos ${MIN_FIELD_LENGTH} caracteres`
   }
 
   if (!data.projectType) {
@@ -85,20 +128,35 @@ const validateForm = (data: ContactFormData): FormErrors => {
   return errors
 }
 
-const submitContactForm = async (data: ContactFormData): Promise<void> => {
-  if (!EMAIL_API_URL) {
+const submitContactForm = async (
+  data: ContactFormData,
+  projectTypeOptions: ProjectTypeOption[],
+  designStatusOptions: DesignStatusOption[]
+): Promise<void> => {
+  if (!WEB3FORMS_ACCESS_KEY) {
     await new Promise((resolve) => setTimeout(resolve, MOCK_SEND_DELAY_MS))
     return
   }
 
-  const response = await fetch(EMAIL_API_URL, {
+  const response = await fetch(WEB3FORMS_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(
+      buildWeb3FormsPayload(
+        data,
+        getOptionLabel(projectTypeOptions, data.projectType),
+        getOptionLabel(designStatusOptions, data.hasDesign)
+      )
+    ),
   })
 
-  if (!response.ok) {
-    throw new Error("Contact form submission failed")
+  const result = (await response.json()) as Web3FormsResponse
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message ?? "Contact form submission failed")
   }
 }
 
@@ -129,10 +187,12 @@ const ContactForm = ({
   onSubmit,
 }: ContactFormProps) => {
   const [form, setForm] = React.useState<ContactFormData>(initialFormState)
+  const [botcheck, setBotcheck] = React.useState(false)
   const [errors, setErrors] = React.useState<FormErrors>({})
   const [submitError, setSubmitError] = React.useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [isSuccess, setIsSuccess] = React.useState(false)
+  const formLoadedAt = React.useRef(Date.now())
 
   const updateField =
     (field: keyof ContactFormData) =>
@@ -160,13 +220,20 @@ const ContactForm = ({
       return
     }
 
+    const isSpam =
+      botcheck || Date.now() - formLoadedAt.current < MIN_SUBMIT_DELAY_MS
+
     setErrors({})
     setSubmitError(null)
     setIsSubmitting(true)
 
     try {
-      await submitContactForm(form)
-      onSubmit?.(form)
+      if (isSpam) {
+        await new Promise((resolve) => setTimeout(resolve, MOCK_SEND_DELAY_MS))
+      } else {
+        await submitContactForm(form, projectTypeOptions, designStatusOptions)
+        onSubmit?.(form)
+      }
       setIsSuccess(true)
     } catch {
       setSubmitError(
@@ -182,7 +249,7 @@ const ContactForm = ({
       as="section"
       animation="fade-up"
       id="contacto"
-      className={cn("section-block w-full scroll-mt-20", className)}
+      className={cn("section-block scroll-target w-full", className)}
       aria-labelledby="contact-form-heading"
     >
       <div className="container-layout">
@@ -218,10 +285,22 @@ const ContactForm = ({
             </h2>
 
             <form
-              className="contact-form mx-auto w-full max-w-3xl"
+              className="contact-form relative mx-auto w-full max-w-3xl"
               onSubmit={handleSubmit}
               noValidate
             >
+              <div className="contact-form__honeypot" aria-hidden="true">
+                <input
+                  id="contact-botcheck"
+                  name="botcheck"
+                  type="checkbox"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  checked={botcheck}
+                  onChange={(event) => setBotcheck(event.target.checked)}
+                />
+              </div>
+
               {submitError && (
                 <p className="contact-form__submit-error" role="alert">
                   {submitError}
@@ -289,6 +368,72 @@ const ContactForm = ({
                       className="contact-form__field-error"
                     >
                       {errors.phone}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="contact-form__row">
+                <label htmlFor="contact-email" className="contact-form__label">
+                  Correo electrónico
+                </label>
+                <div className="contact-form__field-wrap">
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={form.email}
+                    onChange={updateField("email")}
+                    placeholder="correo@ejemplo.com"
+                    className={cn(
+                      "contact-form__field",
+                      errors.email && "contact-form__field--error"
+                    )}
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={
+                      errors.email ? "contact-email-error" : undefined
+                    }
+                  />
+                  {errors.email && (
+                    <span
+                      id="contact-email-error"
+                      className="contact-form__field-error"
+                    >
+                      {errors.email}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="contact-form__row">
+                <label htmlFor="contact-city" className="contact-form__label">
+                  Ciudad
+                </label>
+                <div className="contact-form__field-wrap">
+                  <input
+                    id="contact-city"
+                    name="city"
+                    type="text"
+                    autoComplete="address-level2"
+                    value={form.city}
+                    onChange={updateField("city")}
+                    placeholder="Ciudad de tu proyecto"
+                    className={cn(
+                      "contact-form__field",
+                      errors.city && "contact-form__field--error"
+                    )}
+                    aria-invalid={Boolean(errors.city)}
+                    aria-describedby={
+                      errors.city ? "contact-city-error" : undefined
+                    }
+                  />
+                  {errors.city && (
+                    <span
+                      id="contact-city-error"
+                      className="contact-form__field-error"
+                    >
+                      {errors.city}
                     </span>
                   )}
                 </div>

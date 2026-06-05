@@ -1,5 +1,7 @@
 import * as React from "react"
+import { SECTION_IDS, WHATSAPP_URL, sectionHref } from "../../constants/links"
 import { cn } from "../../utils/cn"
+import { scrollToSection } from "../../utils/scrollToSection"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
 
@@ -49,18 +51,28 @@ const CarpinteriaMedida = ({
   imageAlt = "Cocina con mobiliario a medida en madera y mármol",
   blockTitle = "Innovika es tu aliado en fabricación.",
   children = defaultBody,
-  cta = { label: "HABLEMOS", href: "#contacto" },
+  cta = { label: "HABLEMOS", href: WHATSAPP_URL },
 }: CarpinteriaMedidaProps) => {
+  const processSectionHref = sectionHref(SECTION_IDS.comoTrabajamos)
+
+  const handleProcessScroll = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (scrollToSection(href)) {
+      event.preventDefault()
+    }
+  }
+
   return (
     <ScrollReveal
       as="section"
       animation="fade-up"
-      id="como-trabajamos"
-      className={cn("section-block w-full scroll-mt-20", className)}
+      className={cn("section-block w-full", className)}
       aria-labelledby="carpinteria-medida-title"
     >
       <div className="container-layout flex flex-col gap-8 md:gap-[60px]">
-        <header className="flex flex-col items-center gap-3 text-center md:gap-4">
+        <header className="flex flex-col items-center gap-3 text-center md:gap-5">
           <h2
             id="carpinteria-medida-title"
             className="section-title section-title--with-subtitle max-w-4xl text-center"
@@ -73,9 +85,16 @@ const CarpinteriaMedida = ({
           </p>
 
           {tag && (
-            <span className="font-inter inline-flex items-center rounded-full bg-(--color-accent-100) px-5 py-2 text-[24px]uppercase tracking-wide text-(--color-text-brand) md:text-base lg:mt-[90px]">
+            <Button
+              as="a"
+              href={processSectionHref}
+              variant="accent"
+              size="lg"
+              className="mt-2 md:mt-8 lg:mt-[90px]"
+              onClick={(event) => handleProcessScroll(event, processSectionHref)}
+            >
               {tag}
-            </span>
+            </Button>
           )}
         </header>
 
@@ -96,7 +115,14 @@ const CarpinteriaMedida = ({
 
         {cta && (
           <div className="flex justify-center pt-2">
-            <Button as="a" href={cta.href} variant="primary" size="lg">
+            <Button
+              as="a"
+              href={cta.href}
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {cta.label}
             </Button>
           </div>

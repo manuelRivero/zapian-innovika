@@ -28,8 +28,7 @@ export type HeroProps = {
 
 const defaultTitleLines = [
   "PRODUCCIÓN",
-  "A LA MEDIDA PARA",
-  "TUS PROYECTOS",
+  "A LA MEDIDA PARA TUS PROYECTOS",
 ]
 
 /**
@@ -62,7 +61,7 @@ const Hero = ({
   cta = { label: "INICIAR PROYECTO", href: "#contacto" },
   galleryPrimary,
   gallerySecondary,
-  galleryCaption = "",
+  galleryCaption = "Casa Reserva Real",
 }: HeroProps) => {
   const { isMediaReady, onMediaLoad } = useMediaReady(true)
 
@@ -91,7 +90,7 @@ const Hero = ({
             aria-hidden="true"
           />
 
-          <div className="relative z-10 flex min-h-[inherit] flex-col items-center justify-center px-6 py-12 text-center md:px-10 md:py-12">
+          <div className="hero-banner__content">
             <ScrollReveal
               animation="fade-up"
               shouldAnimate={isMediaReady}
@@ -170,9 +169,7 @@ const Hero = ({
 
         {/* Fila 3 — leyenda */}
         {galleryCaption && (
-          <p className="m-0 font-serif text-base text-(--color-text-primary)">
-            {galleryCaption}
-          </p>
+          <p className="hero-gallery-caption">{galleryCaption}</p>
         )}
       </div>
     </section>

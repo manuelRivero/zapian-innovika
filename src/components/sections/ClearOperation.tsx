@@ -57,8 +57,8 @@ const ClearOperation = ({
           </ScrollReveal>
 
           {/* Tarjeta — segunda en móvil, columna izquierda en desktop */}
-          <div className="order-2 flex lg:order-1">
-            <div className="flex w-full flex-col rounded-(--radius-hero) bg-(--color-cream-50) px-6 py-8 md:px-10 md:py-10">
+          <div className="order-2 flex h-full lg:order-1">
+            <div className="flex h-full w-full flex-col rounded-(--radius-hero) bg-(--color-cream-50) px-6 py-8 md:px-10 md:py-10 lg:justify-center">
               <h2
                 id="clear-operation-title"
                 className="section-title section-title--with-subtitle"

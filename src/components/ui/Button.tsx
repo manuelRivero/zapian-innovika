@@ -25,11 +25,12 @@ const variants = {
 } as const
 
 const sizes = {
-  /** Botones pill del header */
-  nav: "h-auto min-h-9 py-2 px-5 gap-1.5 text-sm leading-snug",
-  sm: "h-8 px-4 text-xs gap-1.5 rounded-(--radius-md)",
-  md: "h-10 px-5 text-sm gap-2 rounded-(--radius-lg)",
-  lg: "h-12 px-7 text-sm gap-2 rounded-(--radius-lg)",
+  /** Píldoras secundarias (nav del header, CTAs accent/nav en secciones) */
+  nav: "h-10 min-h-10 px-5 py-2 gap-1.5 text-sm leading-snug",
+  sm: "h-8 min-h-8 px-4 text-xs gap-1.5",
+  md: "h-10 min-h-10 px-5 py-2 gap-1.5 text-sm leading-snug",
+  /** CTA principal (Contacto del header, HABLEMOS, etc.) */
+  lg: "h-12 min-h-12 px-7 py-3 gap-2 text-sm leading-snug",
 } as const
 
 const shapes = {
@@ -108,7 +109,10 @@ function ButtonInner<C extends React.ElementType = "button">(
   const isNativeButton = Component === "button"
   const resolvedShape =
     shape === "default" &&
-    (variant === "primary" || variant === "nav" || variant === "accent")
+    (variant === "primary" ||
+      variant === "nav" ||
+      variant === "accent" ||
+      variant === "secondary")
       ? "pill"
       : shape
 

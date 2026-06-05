@@ -1,4 +1,5 @@
 import * as React from "react"
+import { WHATSAPP_URL } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
@@ -24,7 +25,7 @@ const CtaBanner = ({
     "Trabaja con un sistema de producción que te da mayor control, claridad y respaldo.",
   imageSrc = "/images/banner.png",
   imageAlt = "Planta de producción de carpintería industrial",
-  cta = { label: "HABLEMOS DE TU PROYECTO", href: "#contacto" },
+  cta = { label: "HABLEMOS DE TU PROYECTO", href: WHATSAPP_URL },
 }: CtaBannerProps) => {
   return (
     <ScrollReveal
@@ -63,8 +64,10 @@ const CtaBanner = ({
                 as="a"
                 href={cta.href}
                 variant="nav"
-                size="lg"
+                size="nav"
                 className="mt-6 md:mt-8"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {cta.label}
               </Button>

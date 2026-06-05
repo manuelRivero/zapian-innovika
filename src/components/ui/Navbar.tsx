@@ -1,33 +1,22 @@
 import * as React from "react"
+import { SECTION_IDS, sectionHref } from "../../constants/links"
 import { cn } from "../../utils/cn"
+import { scrollToSection } from "../../utils/scrollToSection"
 import Button from "./Button"
 
 const navItems = [
-  { label: "Cómo trabajamos", href: "#como-trabajamos" },
-  { label: "Proyectos", href: "#proyectos" },
-  { label: "Materiales", href: "#materiales" },
+  { label: "Cómo trabajamos", href: sectionHref(SECTION_IDS.comoTrabajamos) },
+  { label: "Proyectos", href: sectionHref(SECTION_IDS.proyectos) },
+  { label: "Materiales", href: sectionHref(SECTION_IDS.materiales) },
 ] as const
 
 const contactItem = {
   label: "Contacto",
-  href: "#contacto",
+  href: sectionHref(SECTION_IDS.contacto),
 } as const
 
 type NavbarProps = {
   className?: string
-}
-
-const scrollToSection = (href: string) => {
-  if (!href.startsWith("#")) return false
-
-  const id = href.slice(1)
-  const target = document.getElementById(id)
-
-  if (!target) return false
-
-  target.scrollIntoView({ behavior: "smooth", block: "start" })
-  window.history.replaceState(null, "", href)
-  return true
 }
 
 const BrandLogo = () => (
@@ -74,7 +63,27 @@ const HamburgerIcon = ({ open }: { open: boolean }) => (
 
 const Navbar = ({ className }: NavbarProps) => {
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const [scrolled, setScrolled] = React.useState(false)
   const closeMenu = () => setMenuOpen(false)
+
+  React.useEffect(() => {
+    let lastY = window.scrollY
+
+    const onScroll = () => {
+      const currentY = window.scrollY
+      setScrolled(currentY > 4)
+
+      if (menuOpen && Math.abs(currentY - lastY) > 8) {
+        closeMenu()
+      }
+
+      lastY = currentY
+    }
+
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [menuOpen])
 
   const handleNavClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -88,7 +97,11 @@ const Navbar = ({ className }: NavbarProps) => {
 
   return (
     <header
-      className={cn("relative z-20 bg-(--color-bg-header)", className)}
+      className={cn(
+        "site-header",
+        scrolled && "site-header--scrolled",
+        className
+      )}
     >
       <div className="container-layout">
         <nav
@@ -117,7 +130,7 @@ const Navbar = ({ className }: NavbarProps) => {
               as="a"
               href={contactItem.href}
               variant="primary"
-              size="nav"
+              size="lg"
               className="hidden shrink-0 lg:inline-flex"
               onClick={(event) => handleNavClick(event, contactItem.href)}
             >
@@ -162,7 +175,7 @@ const Navbar = ({ className }: NavbarProps) => {
                 as="a"
                 href={contactItem.href}
                 variant="primary"
-                size="nav"
+                size="lg"
                 fullWidth
                 onClick={(event) => handleNavClick(event, contactItem.href)}
               >

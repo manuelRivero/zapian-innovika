@@ -8,6 +8,7 @@ import ScrollReveal from "../ui/ScrollReveal"
 export type MaterialSlide = {
   id: string
   label: string
+  labelLines?: string[]
   src: string
   alt: string
 }
@@ -26,8 +27,35 @@ export type MaterialsProps = {
 
 const defaultSlides: MaterialSlide[] = [
   {
+    id: "hpl",
+    label: "HPL",
+    src: "/images/material-hpl.png",
+    alt: "Laminado HPL en aplicación interior",
+  },
+  {
+    id: "lite-super-mate",
+    label: "Lite super mate",
+    labelLines: ["Lite super", "mate"],
+    src: "/images/material-lite-super-mate.png",
+    alt: "Acabado lite super mate",
+  },
+  {
+    id: "lite-texturas",
+    label: "Lite texturas",
+    labelLines: ["Lite", "texturas"],
+    src: "/images/material-lite-texturas.png",
+    alt: "Acabado lite con texturas",
+  },
+  {
+    id: "melamina",
+    label: "Melamina",
+    src: "/images/material-melamina.png",
+    alt: "Melamina en mobiliario a medida",
+  },
+  {
     id: "altos-brillos",
     label: "Altos brillos",
+    labelLines: ["Altos", "brillos"],
     src: "/images/material-altos-brillos.png",
     alt: "Acabado de altos brillos en mobiliario",
   },
@@ -46,55 +74,39 @@ const defaultSlides: MaterialSlide[] = [
   {
     id: "chapa-madera",
     label: "Chapa de madera",
+    labelLines: ["Chapa de", "madera"],
     src: "/images/material-chapa-madera.png",
     alt: "Chapa de madera natural",
   },
-  {
-    id: "hpl",
-    label: "HPL",
-    src: "/images/material-hpl.png",
-    alt: "Laminado HPL en aplicación interior",
-  },
-  {
-    id: "lite-super-mate",
-    label: "Lite super mate",
-    src: "/images/material-lite-super-mate.png",
-    alt: "Acabado lite super mate",
-  },
-  {
-    id: "lite-texturas",
-    label: "Lite texturas",
-    src: "/images/material-lite-texturas.png",
-    alt: "Acabado lite con texturas",
-  },
-  {
-    id: "melamina",
-    label: "Melamina",
-    src: "/images/material-melamina.png",
-    alt: "Melamina en mobiliario a medida",
-  },
 ]
 
-const MaterialCard = ({ slide }: { slide: MaterialSlide }) => (
-  <div className="materials-carousel-slide group">
-    <div className="materials-carousel-card">
-      <img src={slide.src} alt={slide.alt} loading="lazy" />
-      <div
-        className={cn(
-          "absolute inset-0 flex items-end justify-center",
-          "bg-(--color-overlay-hero)",
-          "opacity-100 transition-opacity duration-300 ease-in-out",
-          "lg:opacity-0 lg:group-hover:opacity-100"
-        )}
-        aria-hidden={false}
-      >
-        <p className="font-inter m-0 px-4 pb-6 text-center text-lg text-white md:text-xl">
-          {slide.label}
-        </p>
+const MaterialCard = ({ slide }: { slide: MaterialSlide }) => {
+  const lines = slide.labelLines ?? [slide.label]
+
+  return (
+    <div className="materials-carousel-slide group">
+      <div className="materials-carousel-card">
+        <img src={slide.src} alt={slide.alt} loading="lazy" />
+        <div
+          className={cn(
+            "materials-carousel-card__overlay",
+            "opacity-100 transition-opacity duration-300 ease-in-out",
+            "lg:opacity-0 lg:group-hover:opacity-100"
+          )}
+        >
+          <p className="materials-carousel-card__label">
+            {lines.map((line, index) => (
+              <React.Fragment key={line}>
+                {index > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 const Materials = ({
   className,
@@ -153,7 +165,7 @@ const Materials = ({
     <ScrollReveal
       as="section"
       animation="fade-up"
-      className={cn("section-block w-full overflow-hidden scroll-mt-20", className)}
+      className={cn("section-block scroll-target w-full overflow-hidden", className)}
       aria-labelledby="materials-title"
       id="materiales"
     >

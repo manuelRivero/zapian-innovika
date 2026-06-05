@@ -16,34 +16,41 @@
   --font-family-hero-title: var(--font-family-inter);
   --font-family-hero-subtitle: var(--font-family-baskervville);
 
+  /* Paleta oficial Innovika */
+  --color-palette-nogal: #42302e;
+  --color-palette-vino: #591427;
+  --color-palette-azul: #b5e2ff;
+  --color-palette-arena: #fef1b6;
+  --color-palette-cloud: #f8f8f8;
+
   /* Marca (header) */
-  --color-brand-burgundy: #4a101d;
-  --color-brand-cream: #fff2c2;
-  --color-brand-bronze: #6d4c2d;
+  --color-brand-burgundy: var(--color-palette-vino);
+  --color-brand-cream: var(--color-palette-arena);
+  --color-brand-bronze: var(--color-palette-nogal);
   --color-bg-header: var(--color-bg-page);
 
-  /* Burgundy / maroon */
-  --color-burgundy-950: #1f0a10;
-  --color-burgundy-900: #2c1219;
-  --color-burgundy-800: #4a101d;
-  --color-burgundy-700: #5c1a2e;
-  --color-burgundy-600: #6e2238;
-  --color-burgundy-100: #f3e8ec;
+  /* Burgundy / maroon — derivado de Vino */
+  --color-burgundy-950: #2d0b17;
+  --color-burgundy-900: #3d0f1f;
+  --color-burgundy-800: var(--color-palette-vino);
+  --color-burgundy-700: #6b1a2f;
+  --color-burgundy-600: #7d2238;
+  --color-burgundy-100: #f5e8ec;
 
-  /* Cream & yellow accents */
-  --color-cream-50:  #fdf8e1;
-  --color-cream-100: #f5f0e8;
-  --color-cream-200: #ede4d0;
-  --color-cream-300: #e8d9a0;
+  /* Arena — derivado de paleta */
+  --color-cream-50:  var(--color-palette-arena);
+  --color-cream-100: #fef5c8;
+  --color-cream-200: #fdeca0;
+  --color-cream-300: #fce88a;
 
-  /* Sky blue accent (pill CTAs) */
-  --color-accent-100: #bde7f4;
-  --color-accent-200: #9dd4e8;
-  --color-accent-300: #7ec4de;
+  /* Azul — acento de CTAs */
+  --color-accent-100: var(--color-palette-azul);
+  --color-accent-200: #9dd4f5;
+  --color-accent-300: #85c6eb;
 
   /* Partners / dark sections */
-  --color-brown-900: #3d2b1f;
-  --color-brown-800: #4a3528;
+  --color-brown-900: var(--color-palette-nogal);
+  --color-brown-800: #4f3a36;
 
   /* Neutrals */
   --color-neutral-0:   #ffffff;
@@ -54,32 +61,34 @@
   --color-neutral-400: #a8a29e;
   --color-neutral-500: #78716c;
   --color-neutral-600: #57534e;
-  --color-neutral-700: #44403c;
+  --color-neutral-700: var(--color-palette-nogal);
   --color-neutral-800: #292524;
   --color-neutral-900: #1c1917;
 
   --color-overlay: rgba(0, 0, 0, 0.52);
   --color-overlay-light: rgba(0, 0, 0, 0.35);
   --color-overlay-hero: rgba(66, 48, 46, 0.4);
+  --color-overlay-materials: rgba(248, 248, 248, 0.72);
+  --color-process-line: rgba(89, 20, 39, 0.28);
 
   /* Semantic */
-  --color-bg-primary:   #f9f9f9;
-  --color-bg-page:      #f9f9f9;
-  --color-bg-secondary: #faf9f7;
-  --color-bg-cream:     #fdf8e1;
-  --color-bg-dark:      #4a1524;
-  --color-bg-partners:  #3d2b1f;
+  --color-bg-primary:   var(--color-palette-cloud);
+  --color-bg-page:      var(--color-palette-cloud);
+  --color-bg-secondary: var(--color-palette-cloud);
+  --color-bg-cream:     var(--color-palette-arena);
+  --color-bg-dark:      var(--color-palette-vino);
+  --color-bg-partners:  var(--color-palette-nogal);
 
-  --color-text-primary:   #1c1917;
-  --color-text-secondary: #44403c;
-  --color-text-tertiary:  #78716c;
+  --color-text-primary:   var(--color-palette-nogal);
+  --color-text-secondary: #4f3a36;
+  --color-text-tertiary:  #6d5652;
   --color-text-inverse:   #ffffff;
-  --color-text-brand:     #4a1524;
-  --color-text-on-cream:  #2c1219;
+  --color-text-brand:     var(--color-palette-vino);
+  --color-text-on-cream:  var(--color-palette-nogal);
 
-  --color-border-default: #e5e2dd;
-  --color-border-strong:  #d1cdc6;
-  --color-border-brand:   #4a1524;
+  --color-border-default: #e8e4e0;
+  --color-border-strong:  #d6d0cb;
+  --color-border-brand:   var(--color-palette-vino);
 
   /* Typography */
   --font-size-xs:   11px;
@@ -126,8 +135,10 @@
   --spacing-hero-row: 66px;
 
   --size-hero-banner-width:  1212px;
-  --size-hero-banner-height: 608px;
+  --size-hero-banner-height: 658px;
   --ratio-hero-banner:       1212 / 658;
+  --header-height:           4.5rem;
+  --scroll-offset:           calc(var(--header-height) + 0.5rem);
   --ratio-cta-banner:        1213 / 506;
   --min-height-hero-banner-sm: 540px;
   --min-height-cta-banner-sm: 460px;
@@ -166,6 +177,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
+    scroll-padding-top: var(--scroll-offset);
   }
 
   body {
@@ -369,6 +381,8 @@
 
   .text-cta-label {
     font-family: var(--font-family-ui);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     font-weight: 600;
@@ -376,6 +390,8 @@
 
   .text-nav-label {
     font-family: var(--font-family-inter);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     font-weight: 400;
@@ -482,6 +498,26 @@
     object-position: center;
   }
 
+  .materials-carousel-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--color-overlay-materials);
+  }
+
+  .materials-carousel-card__label {
+    margin: 0;
+    font-family: var(--font-family-serif);
+    font-size: clamp(1.125rem, 2.2vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--color-palette-vino);
+  }
+
   @media (min-width: 768px) {
     .materials-carousel-slide {
       flex: 0 0 45%;
@@ -549,6 +585,11 @@
     gap: 0.75rem;
   }
 
+  .process-step--divider {
+    border-top: 1px solid var(--color-process-line);
+    padding-top: 2rem;
+  }
+
   @media (min-width: 1024px) {
     .process-steps-grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -568,7 +609,9 @@
     }
 
     .process-step--divider {
-      border-left: 1px solid var(--color-neutral-200);
+      border-top: none;
+      padding-top: 0;
+      border-left: 1px solid var(--color-process-line);
     }
   }
 
@@ -828,7 +871,7 @@
 
   .footer-brand__logo {
     display: block;
-    width: min(100%, 379px);
+    width: min(100%, 11.875rem);
     height: auto;
   }
 
@@ -985,8 +1028,49 @@
 
   @media (min-width: 1024px) {
     .hero-banner {
-      min-height: 608px;
+      min-height: var(--size-hero-banner-height);
     }
+  }
+
+  .hero-banner__content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3rem 1.5rem 2.75rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero-banner__content {
+      padding: clamp(5.5rem, 16vw, 7.5rem) 2.5rem clamp(4.5rem, 12vw, 6rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-banner__content {
+      padding-top: clamp(7.5rem, 18.7%, 8.75rem);
+      padding-bottom: clamp(5.5rem, 18%, 7.5rem);
+    }
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: var(--color-bg-header);
+    transition: box-shadow 200ms ease-in-out;
+  }
+
+  .site-header--scrolled {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .scroll-target {
+    scroll-margin-top: var(--scroll-offset);
   }
 
   .hero-title {
@@ -996,7 +1080,7 @@
     line-height: 1.05;
     letter-spacing: var(--letter-spacing-tight);
     text-transform: uppercase;
-    color: #f8f8f8;
+    color: var(--color-palette-cloud);
   }
 
   .hero-subtitle {
@@ -1005,19 +1089,21 @@
     font-weight: 700;
     font-size: var(--font-size-section-lead);
     line-height: 1.35;
-    color: #f8f8f8;
+    color: var(--color-palette-cloud);
+  }
+
+  .contact-form__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .hero-cta {
     margin-top: 1.75rem;
-    min-height: auto;
-    padding: 0.875rem 2rem;
-    font-family: var(--font-family-hero-title);
-    font-size: 1.5rem;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: 0;
-    text-transform: uppercase;
   }
 
   @media (min-width: 768px) {
@@ -1028,8 +1114,18 @@
 
   @media (min-width: 1024px) {
     .hero-cta {
-      margin-top: 5.1875rem;
+      margin-top: 4.75rem;
     }
+  }
+
+  .hero-gallery-caption {
+    font-family: var(--font-family-baskervville);
+    font-size: var(--font-size-body);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--color-text-primary);
+    margin: 0;
   }
 
   /* ScrollReveal — animaciones al entrar/salir del viewport */

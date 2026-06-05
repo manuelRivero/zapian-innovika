@@ -1,4 +1,10 @@
 import * as React from "react"
+import {
+  ADDRESS,
+  ADDRESS_MAPS_URL,
+  PHONE_DISPLAY,
+  PHONE_WHATSAPP_URL,
+} from "../../constants/links"
 import { cn } from "../../utils/cn"
 
 export type FooterSocialLink = {
@@ -22,6 +28,7 @@ export type FooterProps = {
   contactItems?: FooterContactItem[]
   addressLabel?: string
   address?: string
+  addressHref?: string
   socialLinks?: FooterSocialLink[]
 }
 
@@ -47,8 +54,8 @@ const defaultContactItems: FooterContactItem[] = [
   {
     id: "whatsapp",
     label: "WhatsApp",
-    value: "33 3452 0580",
-    href: "https://wa.me/523334520580",
+    value: PHONE_DISPLAY,
+    href: PHONE_WHATSAPP_URL,
   },
   {
     id: "email",
@@ -85,7 +92,8 @@ const Footer = ({
   logoAlt = "Innovika — Aliado de tus proyectos",
   contactItems = defaultContactItems,
   addressLabel = "Dirección",
-  address = "Av. Paseo del Nte. 5605, Guadalajara, Technology Park",
+  address = ADDRESS,
+  addressHref = ADDRESS_MAPS_URL,
   socialLinks = defaultSocialLinks,
 }: FooterProps) => {
   return (
@@ -101,8 +109,8 @@ const Footer = ({
             <img
               src={logoSrc}
               alt={logoAlt}
-              width={379}
-              height={74}
+              width={190}
+              height={37}
               className="footer-brand__logo"
               loading="lazy"
               decoding="async"
@@ -127,7 +135,14 @@ const Footer = ({
           <div className="footer-location">
             <div className="footer-block">
               <p className="footer-label">{addressLabel}</p>
-              <p className="footer-value footer-value--address">{address}</p>
+              <a
+                href={addressHref}
+                className="footer-value footer-value--address footer-value--link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {address}
+              </a>
             </div>
 
             <ul className="footer-social m-0 list-none p-0">
