@@ -456,13 +456,18 @@
   .materials-carousel-viewport {
     overflow: hidden;
     width: 100%;
-    cursor: grab;
     user-select: none;
     -webkit-user-select: none;
   }
 
-  .materials-carousel-viewport:active {
-    cursor: grabbing;
+  @media (hover: hover) and (pointer: fine) {
+    .materials-carousel-viewport {
+      cursor: grab;
+    }
+
+    .materials-carousel-viewport:active {
+      cursor: grabbing;
+    }
   }
 
   .materials-carousel-track {
@@ -495,8 +500,13 @@
     object-fit: cover;
     object-position: center;
     user-select: none;
-    -webkit-user-drag: none;
-    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .materials-carousel-card > img {
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
   }
 
   .materials-carousel-card__overlay {
@@ -507,6 +517,21 @@
     justify-content: center;
     padding: 1rem;
     background-color: var(--color-overlay-materials);
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .materials-carousel-slide:hover .materials-carousel-card__overlay {
+      opacity: 1;
+    }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .materials-carousel-slide--overlay-visible .materials-carousel-card__overlay {
+      opacity: 1;
+    }
   }
 
   .materials-carousel-card__label {

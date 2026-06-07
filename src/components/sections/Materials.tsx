@@ -80,20 +80,59 @@ const defaultSlides: MaterialSlide[] = [
   },
 ]
 
-const MaterialCard = ({ slide }: { slide: MaterialSlide }) => {
+const TAP_THRESHOLD_PX = 10
+
+const MaterialCard = ({
+  slide,
+  isOverlayVisible,
+  onTap,
+}: {
+  slide: MaterialSlide
+  isOverlayVisible: boolean
+  onTap: () => void
+}) => {
   const lines = slide.labelLines ?? [slide.label]
+  const pointerStartRef = React.useRef({ x: 0, y: 0 })
+  const didDragRef = React.useRef(false)
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "touch") return
+
+    pointerStartRef.current = { x: event.clientX, y: event.clientY }
+    didDragRef.current = false
+  }
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "touch" || didDragRef.current) return
+
+    const deltaX = Math.abs(event.clientX - pointerStartRef.current.x)
+    const deltaY = Math.abs(event.clientY - pointerStartRef.current.y)
+
+    if (deltaX > TAP_THRESHOLD_PX || deltaY > TAP_THRESHOLD_PX) {
+      didDragRef.current = true
+    }
+  }
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "touch" || didDragRef.current) return
+
+    onTap()
+  }
 
   return (
-    <div className="materials-carousel-slide group">
+    <div
+      className={cn(
+        "materials-carousel-slide",
+        isOverlayVisible && "materials-carousel-slide--overlay-visible"
+      )}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+    >
       <div className="materials-carousel-card">
         <img src={slide.src} alt={slide.alt} loading="lazy" draggable={false} />
-        <div
-          className={cn(
-            "materials-carousel-card__overlay",
-            "opacity-0 transition-opacity duration-300 ease-in-out",
-            "group-hover:opacity-100"
-          )}
-        >
+        <div className="materials-carousel-card__overlay">
           <p className="materials-carousel-card__label">
             {lines.map((line, index) => (
               <React.Fragment key={line}>
@@ -134,10 +173,12 @@ const Materials = ({
 
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
+  const [tappedSlideId, setTappedSlideId] = React.useState<string | null>(null)
 
   const onSelect = React.useCallback(() => {
     if (!emblaApi) return
     setSelectedIndex(emblaApi.selectedScrollSnap())
+    setTappedSlideId(null)
   }, [emblaApi])
 
   React.useEffect(() => {
@@ -153,6 +194,10 @@ const Materials = ({
       emblaApi.off("reInit", onSelect)
     }
   }, [emblaApi, onSelect])
+
+  const handleSlideTap = React.useCallback((slideId: string) => {
+    setTappedSlideId((prev) => (prev === slideId ? null : slideId))
+  }, [])
 
   const scrollTo = React.useCallback(
     (index: number) => {
@@ -181,7 +226,12 @@ const Materials = ({
           <div className="materials-carousel-viewport" ref={emblaRef}>
             <div className="materials-carousel-track">
               {slides.map((slide) => (
-                <MaterialCard key={slide.id} slide={slide} />
+                <MaterialCard
+                  key={slide.id}
+                  slide={slide}
+                  isOverlayVisible={tappedSlideId === slide.id}
+                  onTap={() => handleSlideTap(slide.id)}
+                />
               ))}
             </div>
           </div>
