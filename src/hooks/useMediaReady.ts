@@ -22,9 +22,17 @@ export function useMediaReady(shouldWait: boolean) {
     }
   }, [])
 
+  /** Ref para <video>: detecta caché del navegador (readyState). */
+  const videoRef = React.useCallback((node: HTMLVideoElement | null) => {
+    if (node && node.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+      setLoaded(true)
+    }
+  }, [])
+
   return {
     isMediaReady: !shouldWait || loaded,
     onMediaLoad,
     imageRef,
+    videoRef,
   }
 }

@@ -86,7 +86,7 @@ const MaterialCard = ({ slide }: { slide: MaterialSlide }) => {
   return (
     <div className="materials-carousel-slide group">
       <div className="materials-carousel-card">
-        <img src={slide.src} alt={slide.alt} loading="lazy" />
+        <img src={slide.src} alt={slide.alt} loading="lazy" draggable={false} />
         <div
           className={cn(
             "materials-carousel-card__overlay",

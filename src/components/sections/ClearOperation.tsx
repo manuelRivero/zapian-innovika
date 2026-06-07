@@ -78,7 +78,7 @@ const ClearOperation = ({
                     animation="fade-up"
                     delay={index * 200}
                   >
-                    <hr className="m-0 border-0 border-t" style={{ borderColor: "#B5E2FF" }} />
+                    <hr className="m-0 border-0 border-t border-(--color-palette-nogal)" />
                     <p className="text-body py-3 md:py-3.5">
                       {item}
                     </p>

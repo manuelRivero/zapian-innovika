@@ -63,7 +63,7 @@ const Hero = ({
   gallerySecondary,
   galleryCaption = "Casa Reserva Real",
 }: HeroProps) => {
-  const { onMediaLoad } = useMediaReady(true)
+  const { isMediaReady, onMediaLoad, videoRef } = useMediaReady(true)
 
   return (
     <section
@@ -72,14 +72,20 @@ const Hero = ({
     >
       <div className="container-layout flex flex-col gap-(--spacing-hero-row)">
         {/* Fila 1 — video + overlay + copy */}
-        <div className="hero-media hero-banner relative w-full bg-black">
+        <div className="hero-media hero-banner relative w-full">
           <video
-            className="absolute inset-0 size-full object-cover"
+            ref={videoRef}
+            className={cn(
+              "absolute inset-0 size-full object-cover transition-opacity duration-500",
+              isMediaReady ? "opacity-100" : "opacity-0"
+            )}
             autoPlay
             muted
             loop
             playsInline
+            preload="auto"
             onCanPlay={onMediaLoad}
+            onLoadedData={onMediaLoad}
             aria-hidden="true"
           >
             <source src={HERO_VIDEO_SRC} type="video/mp4" />

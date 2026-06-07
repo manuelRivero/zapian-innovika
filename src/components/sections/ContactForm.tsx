@@ -60,6 +60,8 @@ const initialFormState: ContactFormData = {
 const MIN_FIELD_LENGTH = 3
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MIN_SUBMIT_DELAY_MS = 2500
+const VALIDATION_SUMMARY_MESSAGE =
+  "Hay campos con error. Revisa el formulario y corrige la información indicada."
 const WEB3FORMS_URL = "https://api.web3forms.com/submit"
 const WEB3FORMS_ACCESS_KEY = process.env.GATSBY_WEB3FORMS_ACCESS_KEY ?? ""
 const MOCK_SEND_DELAY_MS = 900
@@ -193,6 +195,7 @@ const ContactForm = ({
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [isSuccess, setIsSuccess] = React.useState(false)
   const formLoadedAt = React.useRef(Date.now())
+  const hasValidationErrors = Object.keys(errors).length > 0
 
   const updateField =
     (field: keyof ContactFormData) =>
@@ -570,7 +573,19 @@ const ContactForm = ({
                 >
                   {submitLabel}
                 </Button>
+              
               </div>
+              {hasValidationErrors && (
+                  <div className="flex justify-center mt-10">
+                  <p
+                    id="contact-form-validation-summary"
+                    className="contact-form__validation-summary"
+                    role="alert"
+                  >
+                    {VALIDATION_SUMMARY_MESSAGE}
+                  </p>
+                </div>
+                )}
             </form>
           </>
         )}

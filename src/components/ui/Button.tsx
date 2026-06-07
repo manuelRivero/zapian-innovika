@@ -124,7 +124,7 @@ function ButtonInner<C extends React.ElementType = "button">(
       aria-disabled={!isNativeButton && isDisabled ? true : undefined}
       className={cn(
         "inline-flex items-center justify-center",
-        size === "nav" ? "text-nav-label" : "font-ui text-cta-label",
+        "font-ui text-cta-label",
         "transition-colors duration-150 ease-in-out",
         "cursor-pointer select-none whitespace-nowrap",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-brand-burgundy)",
