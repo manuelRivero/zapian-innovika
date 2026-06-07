@@ -1,6 +1,5 @@
 import * as React from "react"
 import { cn } from "../../utils/cn"
-import { useMediaReady } from "../../hooks/useMediaReady"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
 
@@ -63,8 +62,6 @@ const Hero = ({
   gallerySecondary,
   galleryCaption = "Casa Reserva Real",
 }: HeroProps) => {
-  const { isMediaReady, onMediaLoad, videoRef } = useMediaReady(true)
-
   return (
     <section
       className={cn("w-full py-5 md:py-6", className)}
@@ -74,18 +71,12 @@ const Hero = ({
         {/* Fila 1 — video + overlay + copy */}
         <div className="hero-media hero-banner relative w-full">
           <video
-            ref={videoRef}
-            className={cn(
-              "absolute inset-0 size-full object-cover transition-opacity duration-500",
-              isMediaReady ? "opacity-100" : "opacity-0"
-            )}
+            className="absolute inset-0 size-full object-cover"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            onCanPlay={onMediaLoad}
-            onLoadedData={onMediaLoad}
             aria-hidden="true"
           >
             <source src={HERO_VIDEO_SRC} type="video/mp4" />
