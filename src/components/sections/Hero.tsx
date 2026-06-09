@@ -68,34 +68,82 @@ const Hero = ({
     [slideshowItems]
   )
 
+  const imgLargeRef = React.useRef<HTMLImageElement>(null)
+  const imgSmallRef = React.useRef<HTMLImageElement>(null)
+
   const [displayIndex, setDisplayIndex] = React.useState(0)
   const [phase, setPhase] = React.useState<GalleryPhase>("entering")
 
-  // Cuando cambia el índice (o en el primer mount), se espera 2 frames para
-  // garantizar que el browser pinte el estado "entering" antes de animar a "visible".
+  // Precarga todas las imágenes al montar para que el browser las tenga en caché.
   React.useEffect(() => {
-    if (items.length <= 1) {
-      setPhase("visible")
+    items.forEach(item => {
+      [item.photoLarge, item.photoSmall].forEach(src => {
+        const img = new Image()
+        img.src = src
+      })
+    })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fase entering: espera a que ambos <img> reales estén pintables (onLoad o .complete),
+  // luego hace double-rAF para garantizar un paint con opacity:0 antes del fade-in.
+  React.useEffect(() => {
+    if (phase !== "entering") return
+    if (items.length <= 1) { setPhase("visible"); return }
+
+    let cancelled = false
+    let r1 = 0, r2 = 0
+
+    const proceed = () => {
+      if (cancelled) return
+      r1 = requestAnimationFrame(() => {
+        r2 = requestAnimationFrame(() => { if (!cancelled) setPhase("visible") })
+      })
+    }
+
+    const large = imgLargeRef.current
+    const small = imgSmallRef.current
+
+    // Si no hay refs o ambas ya están completas, proceder de inmediato
+    if (!large || !small || (large.complete && small.complete)) {
+      proceed()
       return
     }
-    let r1 = 0, r2 = 0
-    r1 = requestAnimationFrame(() => {
-      r2 = requestAnimationFrame(() => setPhase("visible"))
-    })
+
+    let pending = [large, small].filter(img => !img.complete).length
+
+    const onReady = () => {
+      pending -= 1
+      if (pending === 0) proceed()
+    }
+
+    if (!large.complete) {
+      large.addEventListener("load", onReady)
+      large.addEventListener("error", onReady)
+    }
+    if (!small.complete) {
+      small.addEventListener("load", onReady)
+      small.addEventListener("error", onReady)
+    }
+
     return () => {
+      cancelled = true
       cancelAnimationFrame(r1)
       cancelAnimationFrame(r2)
+      large.removeEventListener("load", onReady)
+      large.removeEventListener("error", onReady)
+      small.removeEventListener("load", onReady)
+      small.removeEventListener("error", onReady)
     }
-  }, [displayIndex]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, items.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Una vez visible, programa la salida tras el intervalo configurado.
+  // Fase visible: programa la salida tras el intervalo.
   React.useEffect(() => {
     if (phase !== "visible" || items.length <= 1) return
     const t = setTimeout(() => setPhase("exiting"), SLIDESHOW_INTERVAL_MS)
     return () => clearTimeout(t)
   }, [phase, items.length])
 
-  // Al terminar la animación de salida, avanza al siguiente item.
+  // Fase exiting: al terminar la animación avanza al siguiente item.
   React.useEffect(() => {
     if (phase !== "exiting") return
     const t = setTimeout(() => {
@@ -177,10 +225,10 @@ const Hero = ({
               data-media-slot="gallery-primary"
             >
               <img
+                ref={imgLargeRef}
                 src={current.photoLarge}
                 alt={current.name}
                 className="absolute inset-0 size-full object-cover"
-                loading="lazy"
               />
             </div>
           </div>
@@ -201,10 +249,10 @@ const Hero = ({
               data-media-slot="gallery-secondary"
             >
               <img
+                ref={imgSmallRef}
                 src={current.photoSmall}
                 alt={current.name}
                 className="absolute inset-0 size-full object-cover"
-                loading="lazy"
               />
             </div>
           </div>
