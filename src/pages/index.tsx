@@ -14,16 +14,7 @@ import CtaBanner from "../components/sections/CtaBanner"
 
 const IndexPage: React.FC<PageProps> = () => (
   <Layout>
-    <Hero
-      galleryPrimary={{
-        src: "/images/hero-gallery-primary.png",
-        alt: "Cocina moderna con isla y acabados en madera clara",
-      }}
-      gallerySecondary={{
-        src: "/images/hero-gallery-secondary-56586a.png",
-        alt: "Interior con mobiliario y acabados en madera",
-      }}
-    />
+    <Hero />
     <CarpinteriaMedida />
     <ClearOperation />
     <SpecializedManufacturing />

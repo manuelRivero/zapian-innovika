@@ -19,15 +19,16 @@ export type ClearOperationProps = {
 }
 
 const defaultItems = [
+  "Cumples tiempos con certeza",
   "Reduces errores y retrabajos",
   "Tienes visibilidad en cada etapa del proyecto",
   "Respaldas tu reputación con el cliente final",
-  "Escala de la mano de Innovika",
+  "Escala de la mano de Innovika"
 ]
 
 const ClearOperation = ({
   className,
-  title = "Operación clara",
+  title = "OPERACIÓN CLARA",
   subtitle = "Ejecución confiable",
   items = defaultItems,
   imageSrc = "/images/clear-operation.png",

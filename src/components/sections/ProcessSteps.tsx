@@ -29,12 +29,12 @@ const defaultSteps: ProcessStep[] = [
   },
   {
     id: "production",
-    title: "3. Producción a la medida",
+    title: "3. PRODUCCIÓN A LA MEDIDA",
     description: "Fabricación con control de calidad en cada etapa.",
   },
   {
     id: "delivery",
-    title: "4. Entrega y soporte",
+    title: "4. ENTREGA Y SOPORTE",
     description:
       "Coordinamos la entrega y el acompañamiento en postventa.",
   },

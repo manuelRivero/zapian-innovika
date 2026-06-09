@@ -29,53 +29,53 @@ const defaultSlides: MaterialSlide[] = [
   {
     id: "hpl",
     label: "HPL",
-    src: "/images/material-hpl.png",
+    src: "/images/hpl.png",
     alt: "Laminado HPL en aplicación interior",
   },
   {
     id: "lite-super-mate",
     label: "Lite super mate",
     labelLines: ["Lite super", "mate"],
-    src: "/images/material-lite-super-mate.png",
+    src: "/images/lite-super-mate.png",
     alt: "Acabado lite super mate",
   },
   {
     id: "lite-texturas",
     label: "Lite texturas",
     labelLines: ["Lite", "texturas"],
-    src: "/images/material-lite-texturas.png",
+    src: "/images/lite-texturas.png",
     alt: "Acabado lite con texturas",
   },
   {
     id: "melamina",
     label: "Melamina",
-    src: "/images/material-melamina.png",
+    src: "/images/melamina.png",
     alt: "Melamina en mobiliario a medida",
   },
   {
     id: "altos-brillos",
     label: "Altos brillos",
     labelLines: ["Altos", "brillos"],
-    src: "/images/material-altos-brillos.png",
+    src: "/images/altos-brillos.png",
     alt: "Acabado de altos brillos en mobiliario",
   },
   {
     id: "aluminio",
     label: "Aluminio",
-    src: "/images/material-aluminio.png",
+    src: "/images/aluminio.png",
     alt: "Perfiles y acabados en aluminio",
   },
   {
     id: "laca",
     label: "Laca",
-    src: "/images/material-laca.png",
+    src: "/images/laca.png",
     alt: "Superficie lacada en mobiliario",
   },
   {
     id: "chapa-madera",
     label: "Chapa de madera",
     labelLines: ["Chapa de", "madera"],
-    src: "/images/material-chapa-madera.png",
+    src: "/images/chapa-madera.png",
     alt: "Chapa de madera natural",
   },
 ]
@@ -149,7 +149,7 @@ const MaterialCard = ({
 
 const Materials = ({
   className,
-  title = "Materiales y acabados",
+  title = "MATERIALES Y ACABADOS",
   slides = defaultSlides,
   cta = {
     label: "CONSULTAR MATERIALES DISPONIBLES",

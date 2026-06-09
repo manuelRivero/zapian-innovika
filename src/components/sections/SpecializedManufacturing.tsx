@@ -34,7 +34,7 @@ export type SpecializedManufacturingProps = {
 const defaultBlocks: SpecializedManufacturingBlock[] = [
   {
     id: "kitchens",
-    title: "Altas cocinas",
+    title: "Cocinas",
     subtitle:
       "Integración precisa entre diseño, funcionalidad y fabricación.",
     footer: "Puerta Dublín en chapa de encino natural",

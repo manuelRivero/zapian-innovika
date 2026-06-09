@@ -60,7 +60,7 @@ const DRAG_THRESHOLD_PX = 3
 
 const CertifiedPartners = ({
   className,
-  heading = "Aliados certificados",
+  heading = "ALIADOS CERTIFICADOS",
   logos = defaultLogos,
 }: CertifiedPartnersProps) => {
   const trackRef = React.useRef<HTMLDivElement>(null)

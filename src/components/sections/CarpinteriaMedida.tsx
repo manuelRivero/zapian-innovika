@@ -30,7 +30,6 @@ const defaultBody = (
       Te ayudamos a ejecutar cada proyecto con claridad y respaldo técnico.
     </p>
     <p className="text-body">
-      Te ayudamos a ejecutar cada proyecto con claridad y respaldo técnico.
       Fabricamos mobiliario residencial a la medida para profesionales que
       necesitan procesos confiables, visibilidad del avance y cumplimiento en
       tiempos.

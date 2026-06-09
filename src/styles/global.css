@@ -488,7 +488,7 @@
     height: auto;
     aspect-ratio: var(--ratio-materials-card);
     min-height: 280px;
-    border-radius: var(--radius-hero);
+    border-radius: 4.5rem;
     background-color: var(--color-neutral-200);
   }
 
@@ -1223,6 +1223,45 @@
     line-height: 1.45;
     color: var(--color-text-primary);
     margin: 0;
+  }
+
+  /* Hero gallery slideshow — fases de animación */
+  .hero-gallery-item {
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  /* entering: salta instantáneamente al estado oculto (sin transición) */
+  .hero-gallery-item[data-gallery-phase="entering"] {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition-duration: 0ms;
+    transition-delay: 0ms;
+  }
+
+  /* visible: anima desde oculto hasta visible (animación de entrada) */
+  .hero-gallery-item[data-gallery-phase="visible"] {
+    opacity: 1;
+    transform: none;
+    transition-duration: 1000ms;
+    transition-delay: var(--hero-gallery-enter-delay, 0ms);
+  }
+
+  /* exiting: anima en reversa hasta el estado oculto (animación de salida) */
+  .hero-gallery-item[data-gallery-phase="exiting"] {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition-duration: 600ms;
+    transition-delay: var(--hero-gallery-exit-delay, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-gallery-item {
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
   }
 
   /* ScrollReveal — animaciones al entrar/salir del viewport */
