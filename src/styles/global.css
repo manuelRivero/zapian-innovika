@@ -626,6 +626,10 @@
     gap: 0.75rem;
   }
 
+  .process-step .text-subtitle {
+    font-size: var(--font-size-3xl);
+  }
+
   .process-step--divider {
     border-top: 1px solid var(--color-process-line);
     padding-top: 2rem;
