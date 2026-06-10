@@ -1,11 +1,12 @@
 import * as React from "react"
+import useEmblaCarousel from "embla-carousel-react"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
 
 const HERO_VIDEO_SRC = "/videos/Video Inovika 30seg - Web (1).mp4"
 
 const EXIT_DURATION_MS = 600
-const SLIDESHOW_INTERVAL_MS = 5000
+const SLIDESHOW_INTERVAL_MS = 3000
 
 export type HeroCta = {
   label: string
@@ -68,73 +69,38 @@ const Hero = ({
     [slideshowItems]
   )
 
-  const imgLargeRef = React.useRef<HTMLImageElement>(null)
-  const imgSmallRef = React.useRef<HTMLImageElement>(null)
+  // watchDrag: false — sin arrastre de usuario; el avance es 100% programático.
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, watchDrag: false })
 
-  const [displayIndex, setDisplayIndex] = React.useState(0)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [phase, setPhase] = React.useState<GalleryPhase>("entering")
 
-  // Precarga todas las imágenes al montar para que el browser las tenga en caché.
+  // Cuando Embla avanza (por scrollTo), captura el nuevo índice e inicia entering.
   React.useEffect(() => {
-    items.forEach(item => {
-      [item.photoLarge, item.photoSmall].forEach(src => {
-        const img = new Image()
-        img.src = src
-      })
-    })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    if (!emblaApi) return
+    const handleSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+      setPhase("entering")
+    }
+    emblaApi.on("select", handleSelect)
+    return () => { emblaApi.off("select", handleSelect) }
+  }, [emblaApi])
 
-  // Fase entering: espera a que ambos <img> reales estén pintables (onLoad o .complete),
-  // luego hace double-rAF para garantizar un paint con opacity:0 antes del fade-in.
+  // Fase entering: double-rAF para garantizar un paint en opacity:0 antes del fade-in.
+  // No necesita onLoad: todas las imágenes están en el DOM desde el primer render.
   React.useEffect(() => {
     if (phase !== "entering") return
-    if (items.length <= 1) { setPhase("visible"); return }
-
     let cancelled = false
     let r1 = 0, r2 = 0
-
-    const proceed = () => {
-      if (cancelled) return
-      r1 = requestAnimationFrame(() => {
-        r2 = requestAnimationFrame(() => { if (!cancelled) setPhase("visible") })
-      })
-    }
-
-    const large = imgLargeRef.current
-    const small = imgSmallRef.current
-
-    // Si no hay refs o ambas ya están completas, proceder de inmediato
-    if (!large || !small || (large.complete && small.complete)) {
-      proceed()
-      return
-    }
-
-    let pending = [large, small].filter(img => !img.complete).length
-
-    const onReady = () => {
-      pending -= 1
-      if (pending === 0) proceed()
-    }
-
-    if (!large.complete) {
-      large.addEventListener("load", onReady)
-      large.addEventListener("error", onReady)
-    }
-    if (!small.complete) {
-      small.addEventListener("load", onReady)
-      small.addEventListener("error", onReady)
-    }
-
+    r1 = requestAnimationFrame(() => {
+      r2 = requestAnimationFrame(() => { if (!cancelled) setPhase("visible") })
+    })
     return () => {
       cancelled = true
       cancelAnimationFrame(r1)
       cancelAnimationFrame(r2)
-      large.removeEventListener("load", onReady)
-      large.removeEventListener("error", onReady)
-      small.removeEventListener("load", onReady)
-      small.removeEventListener("error", onReady)
     }
-  }, [phase, items.length]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase])
 
   // Fase visible: programa la salida tras el intervalo.
   React.useEffect(() => {
@@ -143,17 +109,15 @@ const Hero = ({
     return () => clearTimeout(t)
   }, [phase, items.length])
 
-  // Fase exiting: al terminar la animación avanza al siguiente item.
+  // Fase exiting: al terminar la animación avanza Embla al siguiente slide (salto instantáneo).
   React.useEffect(() => {
-    if (phase !== "exiting") return
+    if (phase !== "exiting" || !emblaApi) return
     const t = setTimeout(() => {
-      setDisplayIndex(i => (i + 1) % items.length)
-      setPhase("entering")
+      const next = (emblaApi.selectedScrollSnap() + 1) % items.length
+      emblaApi.scrollTo(next, true)
     }, EXIT_DURATION_MS)
     return () => clearTimeout(t)
-  }, [phase, items.length])
-
-  const current = items[displayIndex]
+  }, [phase, emblaApi, items.length])
 
   return (
     <section
@@ -207,70 +171,81 @@ const Hero = ({
           </div>
         </div>
 
-        {/* Fila 2 — imágenes de galería (slideshow) */}
-        <div className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-stretch">
-          {/* Imagen grande */}
-          <div
-            className="hero-gallery-item w-full"
-            data-gallery-phase={phase}
-            style={
-              {
-                "--hero-gallery-enter-delay": "0ms",
-                "--hero-gallery-exit-delay": "150ms",
-              } as React.CSSProperties
-            }
-          >
-            <div
-              className="hero-media aspect-[16/10] min-h-[220px] w-full md:min-h-[280px] lg:min-h-[320px]"
-              data-media-slot="gallery-primary"
-            >
-              <img
-                ref={imgLargeRef}
-                src={current.photoLarge}
-                alt={current.name}
-                className="absolute inset-0 size-full object-cover"
-              />
-            </div>
-          </div>
+        {/* Filas 2 y 3 — galería slideshow con Embla */}
+        <div className="hero-gallery-embla-viewport" ref={emblaRef}>
+          <div className="hero-gallery-embla-track">
+            {items.map((item, index) => {
+              const slidePhase: GalleryPhase =
+                index === selectedIndex ? phase : "entering"
+              return (
+                <div key={item.name} className="hero-gallery-embla-slide">
+                  {/* Grid de imágenes */}
+                  <div className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-stretch">
+                    {/* Imagen grande */}
+                    <div
+                      className="hero-gallery-item w-full"
+                      data-gallery-phase={slidePhase}
+                      style={
+                        {
+                          "--hero-gallery-enter-delay": "0ms",
+                          "--hero-gallery-exit-delay": "150ms",
+                        } as React.CSSProperties
+                      }
+                    >
+                      <div
+                        className="hero-media aspect-[16/10] min-h-[220px] w-full md:min-h-[280px] lg:min-h-[320px]"
+                        data-media-slot="gallery-primary"
+                      >
+                        <img
+                          src={item.photoLarge}
+                          alt={item.name}
+                          className="absolute inset-0 size-full object-cover"
+                        />
+                      </div>
+                    </div>
 
-          {/* Imagen angosta */}
-          <div
-            className="hero-gallery-item w-full h-full"
-            data-gallery-phase={phase}
-            style={
-              {
-                "--hero-gallery-enter-delay": "300ms",
-                "--hero-gallery-exit-delay": "0ms",
-              } as React.CSSProperties
-            }
-          >
-            <div
-              className="hero-media aspect-[4/5] min-h-[260px] h-full lg:aspect-auto lg:min-h-0"
-              data-media-slot="gallery-secondary"
-            >
-              <img
-                ref={imgSmallRef}
-                src={current.photoSmall}
-                alt={current.name}
-                className="absolute inset-0 size-full object-cover"
-              />
-            </div>
+                    {/* Imagen angosta */}
+                    <div
+                      className="hero-gallery-item w-full h-full"
+                      data-gallery-phase={slidePhase}
+                      style={
+                        {
+                          "--hero-gallery-enter-delay": "300ms",
+                          "--hero-gallery-exit-delay": "0ms",
+                        } as React.CSSProperties
+                      }
+                    >
+                      <div
+                        className="hero-media aspect-[4/5] min-h-[260px] h-full lg:aspect-auto lg:min-h-0"
+                        data-media-slot="gallery-secondary"
+                      >
+                        <img
+                          src={item.photoSmall}
+                          alt={item.name}
+                          className="absolute inset-0 size-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Nombre del proyecto */}
+                  <p
+                    className="hero-gallery-item hero-gallery-caption"
+                    data-gallery-phase={slidePhase}
+                    style={
+                      {
+                        "--hero-gallery-enter-delay": "150ms",
+                        "--hero-gallery-exit-delay": "0ms",
+                      } as React.CSSProperties
+                    }
+                  >
+                    {item.name}
+                  </p>
+                </div>
+              )
+            })}
           </div>
         </div>
-
-        {/* Fila 3 — nombre del proyecto */}
-        <p
-          className="hero-gallery-item hero-gallery-caption"
-          data-gallery-phase={phase}
-          style={
-            {
-              "--hero-gallery-enter-delay": "150ms",
-              "--hero-gallery-exit-delay": "0ms",
-            } as React.CSSProperties
-          }
-        >
-          {current.name}
-        </p>
       </div>
     </section>
   )

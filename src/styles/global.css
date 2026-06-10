@@ -1,19 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&family=Inter:wght@400&family=Montserrat:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+/* Inter → cuerpo/UI secundaria | Gotham → títulos h1–h3 (self-hosted) */
+@import url('https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&family=Inter:wght@400;700&family=Montserrat:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Gotham";
+  src: url("/fonts/Gotham%20Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ─────────────────────────────────────────────────────────
    DESIGN TOKENS — Innovika (Figma)
    ───────────────────────────────────────────────────────── */
 @theme {
   --font-family-sans: "Work Sans", system-ui, sans-serif;
-  /* UI del header / CTAs — geométrica, similar a Gotham / Geomanist */
+  /* UI del header / CTAs */
   --font-family-ui: "Montserrat", "Work Sans", system-ui, sans-serif;
+  /* Gotham — títulos h1–h3 (static/fonts/Gotham Bold.otf) */
+  --font-family-gotham: "Gotham", system-ui, sans-serif;
   --font-family-serif: "Playfair Display", Georgia, "Times New Roman", serif;
   /* Uso general (Figma) */
   --font-family-inter: "Inter", system-ui, sans-serif;
   --font-family-baskervville: "Baskervville", "Playfair Display", Georgia, serif;
   /* Hero fila 1 (Figma) */
-  --font-family-hero-title: var(--font-family-inter);
+  --font-family-hero-title: var(--font-family-gotham);
   --font-family-hero-subtitle: var(--font-family-baskervville);
 
   /* Paleta oficial Innovika */
@@ -237,7 +248,7 @@
   }
 
   .section-title {
-    font-family: var(--font-family-inter);
+    font-family: var(--font-family-gotham);
     font-size: var(--font-size-section-title);
     font-weight: 700;
     line-height: 1.15;
@@ -275,7 +286,7 @@
   }
 
   .text-subtitle {
-    font-family: var(--font-family-inter);
+    font-family: var(--font-family-gotham);
     font-size: var(--font-size-subtitle);
     font-weight: 700;
     line-height: 1.25;
@@ -738,8 +749,8 @@
     font-size: var(--font-size-body);
     font-weight: 700;
     line-height: 1.45;
-    text-transform: none;
-    letter-spacing: var(--letter-spacing-tight);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     color: var(--color-text-brand);
   }
 
@@ -1171,7 +1182,7 @@
   }
 
   .hero-title {
-    font-family: var(--font-family-inter);
+    font-family: var(--font-family-hero-title);
     font-weight: 700;
     font-size: var(--font-size-hero-title);
     line-height: 1.05;
@@ -1223,6 +1234,24 @@
     line-height: 1.45;
     color: var(--color-text-primary);
     margin: 0;
+  }
+
+  /* Hero gallery — Embla slideshow */
+  .hero-gallery-embla-viewport {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .hero-gallery-embla-track {
+    display: flex;
+  }
+
+  .hero-gallery-embla-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-hero-row);
   }
 
   /* Hero gallery slideshow — fases de animación */
