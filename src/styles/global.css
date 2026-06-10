@@ -540,8 +540,12 @@
   }
 
   @media (hover: none), (pointer: coarse) {
-    .materials-carousel-slide--overlay-visible .materials-carousel-card__overlay {
+    .materials-carousel-card__overlay {
       opacity: 1;
+    }
+
+    .materials-carousel-slide--overlay-hidden .materials-carousel-card__overlay {
+      opacity: 0;
     }
   }
 

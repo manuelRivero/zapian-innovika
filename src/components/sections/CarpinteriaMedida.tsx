@@ -1,5 +1,5 @@
 import * as React from "react"
-import { SECTION_IDS, WHATSAPP_URL, sectionHref } from "../../constants/links"
+import { SECTION_IDS, sectionHref } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import { scrollToSection } from "../../utils/scrollToSection"
 import Button from "../ui/Button"
@@ -50,7 +50,7 @@ const CarpinteriaMedida = ({
   imageAlt = "Cocina con mobiliario a medida en madera y mármol",
   blockTitle = "Innovika es tu aliado en fabricación.",
   children = defaultBody,
-  cta = { label: "HABLEMOS", href: WHATSAPP_URL },
+  cta = { label: "HABLEMOS", href: "https://wa.link/7q5lio" },
 }: CarpinteriaMedidaProps) => {
   const processSectionHref = sectionHref(SECTION_IDS.comoTrabajamos)
 

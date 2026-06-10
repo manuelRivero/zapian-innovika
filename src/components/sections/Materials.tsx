@@ -84,11 +84,11 @@ const TAP_THRESHOLD_PX = 10
 
 const MaterialCard = ({
   slide,
-  isOverlayVisible,
+  isOverlayHidden,
   onTap,
 }: {
   slide: MaterialSlide
-  isOverlayVisible: boolean
+  isOverlayHidden: boolean
   onTap: () => void
 }) => {
   const lines = slide.labelLines ?? [slide.label]
@@ -123,7 +123,7 @@ const MaterialCard = ({
     <div
       className={cn(
         "materials-carousel-slide",
-        isOverlayVisible && "materials-carousel-slide--overlay-visible"
+        isOverlayHidden && "materials-carousel-slide--overlay-hidden"
       )}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -173,12 +173,12 @@ const Materials = ({
 
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
-  const [tappedSlideId, setTappedSlideId] = React.useState<string | null>(null)
+  const [revealedSlideId, setRevealedSlideId] = React.useState<string | null>(null)
 
   const onSelect = React.useCallback(() => {
     if (!emblaApi) return
     setSelectedIndex(emblaApi.selectedScrollSnap())
-    setTappedSlideId(null)
+    setRevealedSlideId(null)
   }, [emblaApi])
 
   React.useEffect(() => {
@@ -196,7 +196,7 @@ const Materials = ({
   }, [emblaApi, onSelect])
 
   const handleSlideTap = React.useCallback((slideId: string) => {
-    setTappedSlideId((prev) => (prev === slideId ? null : slideId))
+    setRevealedSlideId((prev) => (prev === slideId ? null : slideId))
   }, [])
 
   const scrollTo = React.useCallback(
@@ -229,14 +229,14 @@ const Materials = ({
                 <MaterialCard
                   key={slide.id}
                   slide={slide}
-                  isOverlayVisible={tappedSlideId === slide.id}
+                  isOverlayHidden={revealedSlideId === slide.id}
                   onTap={() => handleSlideTap(slide.id)}
                 />
               ))}
             </div>
           </div>
 
-          {scrollSnaps.length > 1 && (
+          {/* {scrollSnaps.length > 1 && (
             <div
               className="materials-carousel-dots"
               role="tablist"
@@ -257,7 +257,7 @@ const Materials = ({
                 />
               ))}
             </div>
-          )}
+          )} */}
         </div>
 
         {cta && (

@@ -50,7 +50,7 @@ const defaultLogos: PartnerLogo[] = [
     id: "casazu",
     src: "/images/business-5.png",
     alt: "Casazu",
-    width: 330,
+    width: 350,
     height: 52,
   },
 ]
