@@ -19,11 +19,16 @@ type NavbarProps = {
   className?: string
 }
 
-const BrandLogo = () => (
+const BrandLogo = ({
+  onClick,
+}: {
+  onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void
+}) => (
   <a
     href="/"
     className="flex shrink-0 items-center no-underline"
     aria-label="Innovika — inicio"
+    onClick={onClick}
   >
     <img
       src="/images/logo-innovika.png"
@@ -95,6 +100,13 @@ const Navbar = ({ className }: NavbarProps) => {
     }
   }
 
+  const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    window.scrollTo({ top: 0, behavior: "smooth" })
+    window.history.replaceState(null, "", "/")
+    closeMenu()
+  }
+
   return (
     <header
       className={cn(
@@ -108,7 +120,7 @@ const Navbar = ({ className }: NavbarProps) => {
           className="grid min-h-[4.5rem] grid-cols-[1fr_auto] items-center gap-4 py-3 lg:grid-cols-[1fr_auto_1fr]"
           aria-label="Navegación principal"
         >
-          <BrandLogo />
+          <BrandLogo onClick={handleLogoClick} />
 
           <div className="hidden items-center justify-center gap-2 lg:flex">
             {navItems.map((item) => (
