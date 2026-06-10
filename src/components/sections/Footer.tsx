@@ -115,6 +115,11 @@ const Footer = ({
               loading="lazy"
               decoding="async"
             />
+            <p className="footer-value">
+              Cobertura en México
+              <br />
+              y Estados Unidos.
+            </p>
           </div>
 
           <div className="footer-contact">

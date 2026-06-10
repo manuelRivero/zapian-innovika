@@ -985,6 +985,12 @@
     align-items: start;
   }
 
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
   .footer-brand__logo {
     display: block;
     width: min(100%, 11.875rem);
