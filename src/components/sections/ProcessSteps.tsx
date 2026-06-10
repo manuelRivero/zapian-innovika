@@ -49,14 +49,13 @@ const ProcessSteps = ({
     <ScrollReveal
       as="section"
       animation="fade-up"
-      id={SECTION_IDS.comoTrabajamos}
-      className={cn("section-block scroll-target w-full", className)}
-      aria-labelledby="process-steps-heading"
+      className={cn("section-block w-full", className)}
+      aria-labelledby={SECTION_IDS.comoTrabajamos}
     >
       <div className="container-layout flex flex-col gap-10 md:gap-12">
         <h2
-          id="process-steps-heading"
-          className="section-title text-center"
+          id={SECTION_IDS.comoTrabajamos}
+          className="section-title scroll-target text-center"
         >
           {heading}
         </h2>

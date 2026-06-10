@@ -1,6 +1,7 @@
 import * as React from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import Autoplay from "embla-carousel-autoplay"
+import { SECTION_IDS } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
@@ -210,14 +211,13 @@ const Materials = ({
     <ScrollReveal
       as="section"
       animation="fade-up"
-      className={cn("section-block scroll-target w-full overflow-hidden", className)}
-      aria-labelledby="materials-title"
-      id="materiales"
+      className={cn("section-block w-full overflow-hidden", className)}
+      aria-labelledby={SECTION_IDS.materiales}
     >
       <div className="container-layout flex flex-col gap-8 md:gap-10">
         <h2
-          id="materials-title"
-          className="section-title text-center"
+          id={SECTION_IDS.materiales}
+          className="section-title scroll-target text-center"
         >
           {title}
         </h2>

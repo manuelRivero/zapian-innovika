@@ -1,5 +1,5 @@
 import * as React from "react"
-import { INSTAGRAM_URL } from "../../constants/links"
+import { INSTAGRAM_URL, SECTION_IDS } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
@@ -221,14 +221,13 @@ const SpecializedManufacturing = ({
 }: SpecializedManufacturingProps) => {
   return (
     <section
-      id="proyectos"
-      className={cn("section-block scroll-target w-full", className)}
-      aria-labelledby="specialized-manufacturing-heading"
+      className={cn("section-block w-full", className)}
+      aria-labelledby={SECTION_IDS.proyectos}
     >
       <div className="container-layout flex flex-col gap-10 md:gap-14">
         <h2
-          id="specialized-manufacturing-heading"
-          className="section-title text-center"
+          id={SECTION_IDS.proyectos}
+          className="section-title scroll-target text-center"
         >
           {heading}
         </h2>

@@ -1,4 +1,5 @@
 import * as React from "react"
+import { SECTION_IDS } from "../../constants/links"
 import { cn } from "../../utils/cn"
 import Button from "../ui/Button"
 import ScrollReveal from "../ui/ScrollReveal"
@@ -251,9 +252,8 @@ const ContactForm = ({
     <ScrollReveal
       as="section"
       animation="fade-up"
-      id="contacto"
-      className={cn("section-block scroll-target w-full", className)}
-      aria-labelledby="contact-form-heading"
+      className={cn("section-block w-full", className)}
+      aria-labelledby={SECTION_IDS.contacto}
     >
       <div className="container-layout">
         {isSuccess ? (
@@ -264,8 +264,8 @@ const ContactForm = ({
           >
             <SuccessIcon />
             <h2
-              id="contact-form-heading"
-              className="section-title section-title--with-subtitle text-center"
+              id={SECTION_IDS.contacto}
+              className="section-title section-title--with-subtitle scroll-target text-center"
             >
               ¡Mensaje enviado!
             </h2>
@@ -281,8 +281,8 @@ const ContactForm = ({
         ) : (
           <>
             <h2
-              id="contact-form-heading"
-              className="section-title text-center"
+              id={SECTION_IDS.contacto}
+              className="section-title scroll-target text-center"
             >
               {heading}
             </h2>

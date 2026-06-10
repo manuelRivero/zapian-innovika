@@ -149,7 +149,8 @@
   --size-hero-banner-height: 658px;
   --ratio-hero-banner:       1212 / 658;
   --header-height:           4.5rem;
-  --scroll-offset:           calc(var(--header-height) + 0.5rem);
+  --scroll-gap:              50px;
+  --scroll-offset:           calc(var(--header-height) + var(--scroll-gap));
   --ratio-cta-banner:        1213 / 506;
   --min-height-hero-banner-sm: 540px;
   --min-height-cta-banner-sm: 460px;

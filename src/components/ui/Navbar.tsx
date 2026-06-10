@@ -90,10 +90,12 @@ const Navbar = ({ className }: NavbarProps) => {
     event: React.MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
-    if (scrollToSection(href)) {
-      event.preventDefault()
-      closeMenu()
-    }
+    if (!href.startsWith("#")) return
+
+    event.preventDefault()
+    const wasMenuOpen = menuOpen
+    closeMenu()
+    scrollToSection(href, { defer: wasMenuOpen })
   }
 
   const handleLogoClick = () => {
