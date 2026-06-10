@@ -5,6 +5,11 @@ const getScrollOffset = () => {
   return Number.isFinite(offset) ? offset : 80
 }
 
+export const scrollToTop = (): void => {
+  window.scrollTo({ top: 0, behavior: "smooth" })
+  window.history.replaceState(null, "", "/")
+}
+
 export const scrollToSection = (href: string): boolean => {
   if (!href.startsWith("#")) return false
 

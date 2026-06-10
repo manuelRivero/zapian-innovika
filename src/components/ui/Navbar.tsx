@@ -1,7 +1,7 @@
 import * as React from "react"
 import { SECTION_IDS, sectionHref } from "../../constants/links"
 import { cn } from "../../utils/cn"
-import { scrollToSection } from "../../utils/scrollToSection"
+import { scrollToSection, scrollToTop } from "../../utils/scrollToSection"
 import Button from "./Button"
 
 const navItems = [
@@ -19,14 +19,10 @@ type NavbarProps = {
   className?: string
 }
 
-const BrandLogo = ({
-  onClick,
-}: {
-  onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void
-}) => (
-  <a
-    href="/"
-    className="flex shrink-0 items-center no-underline"
+const BrandLogo = ({ onClick }: { onClick: () => void }) => (
+  <button
+    type="button"
+    className="flex shrink-0 cursor-pointer items-center border-0 bg-transparent p-0"
     aria-label="Innovika — inicio"
     onClick={onClick}
   >
@@ -38,7 +34,7 @@ const BrandLogo = ({
       height={90}
       decoding="async"
     />
-  </a>
+  </button>
 )
 
 const HamburgerIcon = ({ open }: { open: boolean }) => (
@@ -100,10 +96,8 @@ const Navbar = ({ className }: NavbarProps) => {
     }
   }
 
-  const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault()
-    window.scrollTo({ top: 0, behavior: "smooth" })
-    window.history.replaceState(null, "", "/")
+  const handleLogoClick = () => {
+    scrollToTop()
     closeMenu()
   }
 
