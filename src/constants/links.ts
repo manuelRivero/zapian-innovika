@@ -1,4 +1,4 @@
-export const WHATSAPP_URL = "https://wa.link/hvyype"
+export const WHATSAPP_URL = "https://wa.link/7q5lio"
 
 export const PHONE_DISPLAY = "33 3552 0580"
 

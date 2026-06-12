@@ -665,7 +665,7 @@
   .partners-marquee {
     overflow: hidden;
     width: 100%;
-    min-height: clamp(2.75rem, 5vw, 4.75rem);
+    min-height: clamp(8.25rem, 15vw, 14.25rem);
     touch-action: pan-y pinch-zoom;
   }
 
@@ -691,7 +691,7 @@
     flex-shrink: 0;
     width: auto;
     max-width: none;
-    height: clamp(2.25rem, 4.5vw, 4.25rem);
+    height: clamp(6.75rem, 13.5vw, 12.75rem);
     object-fit: contain;
     object-position: center;
     user-select: none;
@@ -925,26 +925,30 @@
     align-items: center;
     gap: 0.75rem;
     padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 3rem);
-    border: 1px solid var(--color-accent-200);
-    border-radius: 0.25rem;
-    background: linear-gradient(
-      180deg,
-      var(--color-cream-50) 0%,
-      var(--color-neutral-0) 100%
-    );
+    background: var(--color-palette-nogal);
+    color: var(--color-text-inverse);
     animation: contact-form-success-in 0.55s ease-out both;
+  }
+
+  .contact-form-success .section-title {
+    color: var(--color-text-inverse);
+  }
+
+  .contact-form-success .section-lead {
+    color: var(--color-palette-azul);
   }
 
   .contact-form-success__icon {
     width: 4.5rem;
     height: 4.5rem;
     margin-bottom: 0.5rem;
-    color: var(--color-text-brand);
+    color: var(--color-palette-azul);
   }
 
   .contact-form-success__body {
     max-width: 34rem;
     margin-top: 1.25rem;
+    color: var(--color-text-inverse);
   }
 
   @keyframes contact-form-success-in {

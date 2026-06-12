@@ -258,7 +258,7 @@ const ContactForm = ({
       <div className="container-layout">
         {isSuccess ? (
           <div
-            className="contact-form-success mx-auto w-full max-w-3xl"
+            className="contact-form-success mx-auto w-full max-w-3xl rounded-(--radius-hero)"
             role="status"
             aria-live="polite"
           >

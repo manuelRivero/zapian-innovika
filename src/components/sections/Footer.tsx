@@ -4,6 +4,7 @@ import {
   ADDRESS_MAPS_URL,
   PHONE_DISPLAY,
   PHONE_WHATSAPP_URL,
+  WHATSAPP_URL
 } from "../../constants/links"
 import { cn } from "../../utils/cn"
 
@@ -55,7 +56,7 @@ const defaultContactItems: FooterContactItem[] = [
     id: "whatsapp",
     label: "WhatsApp",
     value: PHONE_DISPLAY,
-    href: PHONE_WHATSAPP_URL,
+    href: WHATSAPP_URL,
   },
   {
     id: "email",
