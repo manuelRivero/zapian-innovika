@@ -58,11 +58,29 @@ const defaultLogos: PartnerLogo[] = [
 const AUTO_SCROLL_SPEED = 0.8
 const DRAG_THRESHOLD_PX = 3
 
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = React.useState(() => {
+    if (typeof window === "undefined") return false
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  })
+
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const update = () => setReduced(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
+
+  return reduced
+}
+
 const CertifiedPartners = ({
   className,
   heading = "ALIADOS CERTIFICADOS",
   logos = defaultLogos,
 }: CertifiedPartnersProps) => {
+  const prefersReducedMotion = usePrefersReducedMotion()
   const trackRef = React.useRef<HTMLDivElement>(null)
   const offsetRef = React.useRef(0)
   const loopWidthRef = React.useRef(0)
@@ -73,18 +91,24 @@ const CertifiedPartners = ({
   const [isGrabbing, setIsGrabbing] = React.useState(false)
 
   const marqueeLogos = React.useMemo(
-    () => [...logos, ...logos],
-    [logos]
+    () => (prefersReducedMotion ? logos : [...logos, ...logos]),
+    [logos, prefersReducedMotion]
   )
 
   const measureLoopWidth = React.useCallback(() => {
     const track = trackRef.current
     if (!track) return 0
 
-    const loopWidth = track.offsetWidth / 2
+    const duplicate = track.children[logos.length] as HTMLElement | undefined
+    const measuredFromDuplicate = duplicate?.offsetLeft ?? 0
+    const loopWidth =
+      measuredFromDuplicate > 0
+        ? measuredFromDuplicate
+        : track.scrollWidth / 2
+
     loopWidthRef.current = loopWidth > 0 ? loopWidth : 0
     return loopWidthRef.current
-  }, [])
+  }, [logos.length])
 
   const normalizeOffset = React.useCallback((offset: number) => {
     const loopWidth = loopWidthRef.current || measureLoopWidth()
@@ -118,23 +142,32 @@ const CertifiedPartners = ({
 
   React.useEffect(() => {
     const track = trackRef.current
-    if (!track) return
+    if (!track || prefersReducedMotion) return
 
-    measureLoopWidth()
-    applyOffset(0)
-
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
-    const resizeObserver = new ResizeObserver(() => {
+    const syncLayout = () => {
       measureLoopWidth()
       applyOffset(offsetRef.current)
-    })
+    }
 
+    syncLayout()
+    applyOffset(0)
+
+    const resizeObserver = new ResizeObserver(syncLayout)
     resizeObserver.observe(track)
+
+    const images = track.querySelectorAll("img")
+    const handleImageReady = () => syncLayout()
+
+    images.forEach((image) => {
+      if (image.complete) return
+      image.addEventListener("load", handleImageReady)
+      image.addEventListener("error", handleImageReady)
+    })
 
     let frameId = 0
 
     const tick = () => {
-      if (!reducedMotionQuery.matches && !isUserInteractingRef.current) {
+      if (!isUserInteractingRef.current) {
         applyOffset(offsetRef.current - AUTO_SCROLL_SPEED)
       }
 
@@ -146,8 +179,22 @@ const CertifiedPartners = ({
     return () => {
       window.cancelAnimationFrame(frameId)
       resizeObserver.disconnect()
+      images.forEach((image) => {
+        image.removeEventListener("load", handleImageReady)
+        image.removeEventListener("error", handleImageReady)
+      })
     }
-  }, [applyOffset, measureLoopWidth])
+  }, [applyOffset, measureLoopWidth, prefersReducedMotion])
+
+  React.useEffect(() => {
+    if (!prefersReducedMotion) return
+
+    const track = trackRef.current
+    if (!track) return
+
+    track.style.transform = ""
+    offsetRef.current = 0
+  }, [prefersReducedMotion])
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "mouse" && event.button !== 0) return
@@ -218,13 +265,16 @@ const CertifiedPartners = ({
       <div
         className={cn(
           "partners-marquee mt-8 md:mt-10",
+          prefersReducedMotion && "partners-marquee--static",
           isGrabbing && "partners-marquee--grabbing"
         )}
         aria-label="Marcas aliadas certificadas"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={endPointerInteraction}
-        onPointerCancel={endPointerInteraction}
+        onPointerDown={prefersReducedMotion ? undefined : handlePointerDown}
+        onPointerMove={prefersReducedMotion ? undefined : handlePointerMove}
+        onPointerUp={prefersReducedMotion ? undefined : endPointerInteraction}
+        onPointerCancel={
+          prefersReducedMotion ? undefined : endPointerInteraction
+        }
       >
         <div ref={trackRef} className="partners-marquee__track">
           {marqueeLogos.map((logo, index) => (
@@ -242,7 +292,7 @@ const CertifiedPartners = ({
                 width={logo.width}
                 height={logo.height}
                 className="partners-marquee__logo"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
                 draggable={false}
               />
